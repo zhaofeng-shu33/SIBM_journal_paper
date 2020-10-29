@@ -1,5 +1,14 @@
 \documentclass[journal]{IEEEtran}
-
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newcommand{\ide}[2]{ \delta_{#1 #2} }
+\DeclareMathOperator{\SSBM}{SSBM}
+\DeclareMathOperator{\dist}{dist}
 
 \title{Exact recovery of Stochastic Block Model with Ising sampling}
 \author{
@@ -24,7 +33,7 @@
 	compared with other theoretically guaranteed algorithm.
 \end{abstract}
 \begin{IEEEkeywords}
-	Ising model
+	stochastic block model, exact recovery, Ising model, modularity maximization, Metropolis sampling
 \end{IEEEkeywords}
 \section{Introduction}
 Stochastic Block Model (SBM) is one of statistical modeling for community detection problems  \cite{holland1983stochastic, abbe2017community}.
@@ -51,7 +60,9 @@ property and sample complexity results. Then we will propose a specialized Ising
 we can also achieve exact recovery for SBM.
 
 In order to achieve exact recovery of SBM, the extra parameters of Ising model should be carefully chosen, which depends on the parameters of SBM. 
-
+Previous methods require jointly estimation of node labels and model parameters \cite{nowicki2001estimation}, which are not suitable when only model parameters are required.
+In this article, we propose an unbiased convergent estimator for SBM parameters when the number of communities is given. This estimator is not only useful
+for Ising sampling, but also beneficial for other recovery algorithms which requires SBM parameters.
 
 Exact solution to maximize the modularity or exact sampling from modularity-based Ising model is NP hard. Many algorithms have been proposed to find an approximation of maximal modularity in polynomial time.
 Among these algorithms, simulated annealing performs well and produces a solution very close to the true maximal value \cite{liu2010detecting}.
@@ -60,6 +71,53 @@ metropolis sequential sampling is used to generate samples for Ising model \cite
 use metropolis sampling technique to sample from Ising model on SBM. We will demonstrate by experiments that for non-exact recovery region of SBM our method outperforms other
 theoretically guaranteed algorithm like SDP and spectral clustering.
 
+This paper is organized as follows. Firstly, in section \ref{sec:sibm} we introduce the stochastic Ising block model for both two and multiple communities.
+Then in the next section \ref{sec:dcsibm}, we propose Degree-corrected Stochastic Ising Block Model and uses this model to prove the exact recovery by modularity
+maximization algorithm. Besides, in section \ref{sec:psbm}, we give a parameter estimator for SBM. Based on this estimator, in section \ref{sec:ms},
+we propose a community detection method which use metropolis algorithm to generate sample for Ising model. Numerical experiments and conclusion are given at last
+to finish this paper.
+
+Throughout this paper, the number of community is denoted by $k$; $m$ is the number of samples; $\lfloor x \rfloor$ is the floor function of $x$; the random undirected graph $G$ is written as $G(V,E)$ with vertex set $V$ and edge set $E$;
+$V=\{1,\dots, n\} =: [n]$;
+the label of each node is a random variable $X_i$; $X_i$ is chosen from $W= \{1, \omega, \dots, \omega^{k-1}\}$ and we further require $W$
+is a cyclic group with order $k$; $W^n$ is the n-ary Cartesian power of $W$; $f$ is a permutation function on $W$ and applied to $W^n$ in elementwise way; the set $S_k$ is used to represent all permutation functions on $W$ and $S_k(\sigma):=\{f(\sigma)| f\in S_k\}$ for $\sigma \in W^n$; the indicator function $\ide{x}{y}$ or $\delta(x,y)$ is defined as
+$\ide{x}{y} = 1 $ when $x=y$, and $\ide{x}{y}=0$ when $x\neq y$; $g(n) = \Theta(f(n))$ if there exists constant $c_1 < c_2$ such that $c_1 f(n) \leq g(n) \leq c_2 f(n)$
+for large $n$;
+$\Lambda := \{ \omega^j  \cdot \mathbf{1}_n | j=0, \dots,k-1\}$
+where $\mathbf{1}_n$ is the all one vector with dimension $n$;
+we define the distance of two vectors as:
+$\dist(\sigma, X)
+=|\{i\in[n]:\sigma_i\neq X_i\}| \textrm{ for } \sigma,X\in W^n
+$ and the distance of a vector to a space $S\subseteq W^n$
+as
+$\dist(\sigma,S)
+:=\min\{\dist(\sigma, \sigma') | \sigma' \in S\}
+$.
+
+\section{Stochastic Ising Block Model}\label{sec:sibm}
+We consider a special symmetric stochastic block model, which is defined as follows:
+	\begin{definition}[SSBM with $k$ communities] \label{def:SSBM}
+	Let $0\leq q<p\leq 1$ and $V=[n]$. The random vector $X=(X_1,\dots,X_n)\in W^n$ and random graph $G$ are drawn under $\SSBM(n,k,p,q)$ if
+	\begin{enumerate}
+		\item $X$ is drawn uniformly with the constraint that $|\{v \in [n] : X_v = u\}| = \frac{n}{k}$ for $u\in W$;
+		
+		\item There is an edge of $G$ between the vertices $i$ and $j$ with probability $p$ if $X_i=X_j$ and with probability $q$ if $X_i \neq X_j$; the existence of each edge is independent with each other.
+	\end{enumerate}
+\end{definition}
+Under SSBM, we use $Z_{ij}:=\mathbbm{1}[\{i,j\} \in E(G)]$, which is the indicator function of the existence of an edge between node $i$ and $j$.
+Given the node labels $X$, $Z_{ij}$ is a Bernoulli random variable, whose expectation is given by:
+\begin{equation}
+\mathbb{E}[Z_{ij}] =
+\begin{cases}
+p & X_i = X_j \\ 
+q & X_i \neq X_j
+\end{cases}
+\end{equation}
+
+\section{Degree-corrected Stochastic Ising Block Model}\label{sec:dcsibm}
+\section{Parameter Estimation of SBM}\label{sec:psbm}
+\section{Community Detection based on Metropolis Sampling}\label{sec:ms}
+\section{Conclusion}
 \bibliographystyle{IEEEtran}
 \bibliography{exportlist}
 \end{document}
