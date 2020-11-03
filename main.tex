@@ -179,7 +179,7 @@ as follows:
 	The subscript in $P_{\sigma|G}$ indicates that the distribution depends on $G$, and
 	$Z_G(\alpha,\beta)$ is the normalizing constant for this distribution.
 \end{definition}
-In physics, we often call $\beta$ the inverse temperature and $Z_G(\alpha, \beta)$ the partition function.
+In physics, we often call $\beta$ the inverse temperature and $Z_G(\gamma, \beta)$ the partition function.
 The Hamiltonian energy $H(\bar{\sigma})$ consists of two terms: the repulsive interaction between nodes without edge connection
 and the attractive interaction between nodes with edge connection. The term $\gamma$ is the ratio of the power of these two
 interactions. We should add $\frac{\log n}{n}$ to balance the two terms because there are only $O(\frac{n}{\log n})$
@@ -218,7 +218,7 @@ where $\bar{\beta} = \min_{\beta > 0} g(\beta)$.
 Let $\beta^*$ be the solution to the equation $g(\beta) = 0$ and $\beta^* < \bar{\beta}$, then depending on
 how $(\gamma, \beta)$ take values, we have
 \begin{enumerate}
-\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in S_k(X)) \leq (k+o(1))n^{\tilde{g}(\beta)/2}$;
+\item If $\gamma > b$ and $\beta > \beta^*$, $\forall \epsilon > 0, P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
 \item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in \Lambda) \leq (1+o(1))n^{\tilde{g}(\beta)/2}$;
 \item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
 n^{-g(\beta)} \}$;
@@ -288,9 +288,9 @@ where $\dist(\bar{\sigma}',X)=1$.
 	P_G( \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) \geq n^{\tilde{g}(\beta)/2-1}) \leq (1+o(1))n^{\tilde{g}(\beta)/2}
 	\end{equation}
 	Taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
-	$$
+	\begin{equation}\label{eq:energy_diff}
 	H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_n - A^s_n) + \gamma\frac{\log n}{n}
-	$$
+	\end{equation}
 	where $A_n^0 \sim Binom(\frac{n}{k}-1, \A)$ and $A^s_n \sim Binom(\frac{n}{k}, \B)$.
 	Therefore, \eqref{eq:beta_HP} is equivalent with
 	\begin{equation}\label{eq:pgAs}
@@ -310,9 +310,9 @@ $\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} \leq n^
 Or more generally, we have the following proposition
 \begin{proposition}\label{prop:small}
 If $\gamma>b$, $\beta>\beta^\ast$,
-then there is a set $\cG^{(r)}$ such that
+then $\forall \epsilon > 0$ there is a set $\cG^{(r)}$ such that
 \begin{equation}\label{eq:Gr}
-P(G\in\cG^{(r)}_n) \ge 1 - (k-1)^r n^{r\tilde{g}(\beta)/2}
+P(G\in\cG^{(r)}_n) \ge 1 - n^{r(\tilde{g}(\beta)/2 + \epsilon)}
 \end{equation}
 and
 for every $G\in\cG^{(r)}_n$,
@@ -331,12 +331,12 @@ the appendix.
 Now we use Proposition \ref{prop:small} to show 1) of Theorem \ref{thm:phase_transition}.
 \begin{proof}[Proof of Theorem \ref{thm:phase_transition} 1)]
 Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
-we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq (k+o(1))n^{\tilde{g}(\beta)/2}$.
-Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, from \eqref{eq:Gr} we have
+we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq k n^{\tilde{g}(\beta)/2 + \epsilon}$.
+Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, choose $\frac{\epsilon}{2}$, from \eqref{eq:Gr} we have
 \begin{align*}
 P_G(\cG'^c_n) &= P_G(\cup_{r=1}^n (\cG_n^{(r)})^c) \\
-&\leq \sum_{r=1}^n (k-1)^r n^{r\tilde{g}(\beta)/2} \\
-&=(k-1 + o(1)) n^{\tilde{g}(\beta)/2}
+&\leq \sum_{r=1}^n n^{r(\tilde{g}(\beta)/2 + \epsilon/2)} \\
+& \leq \frac{1}{2} n^{\tilde{g}(\beta)/2 + \epsilon}
 \end{align*}
 where the last equality follows from the estimation of sum of geometric series.
 On the other hand, for every $G \in \cG'_n$, from \eqref{eq:psigmaX}
@@ -345,12 +345,12 @@ we have
 \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{1-P_{\sigma | G}(\sigma \neq X | D(\sigma, X))} &= \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \\
 &< \sum_{r=1}^{n}  n^{r\tilde{g}(\beta)/2}
 \end{align*}
-from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq (1+o(1))n^{\tilde{g}(\beta)/2}$
+from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq \frac{1}{2}n^{\tilde{g}(\beta)/2 + \epsilon}$
 Finally, 
 \begin{align*}
 P_{\SIBM}(\sigma \neq X|D(\sigma, X)) &= \sum_{G\in \cG'_n} P_G(G)P_{\sigma |G}(\sigma \neq X | D(\sigma, X)) \\
 + P_G(\cG'^c_n)
-& \leq (k+o(1)) n^{\tilde{g}(\beta)/2}
+& \leq n^{\tilde{g}(\beta)/2 + \epsilon}
 \end{align*}
 \end{proof}
 
@@ -361,4 +361,85 @@ P_{\SIBM}(\sigma \neq X|D(\sigma, X)) &= \sum_{G\in \cG'_n} P_G(G)P_{\sigma |G}(
 \section{Conclusion}
 \bibliographystyle{IEEEtran}
 \bibliography{exportlist}
+\appendix
+\section*{Proof of Proposition \ref{prop:small}}
+We distinguish the discussion between two cases: $r\leq \frac{n}{\sqrt{\log n}}$
+and $r > \frac{n}{\sqrt{\log n}}$. Some additional notation is needed for the proof.
+Similar with \eqref{eq:energy_diff}, generally we can write
+$$
+H(\bar{\sigma}) - H(X)=
+(1 + \gamma \frac{ \log n}{n})[A_{\bar{\sigma}} - B_{\bar{\sigma}}] + \gamma\frac{ \log n}{n} N_{\bar{\sigma}}
+$$
+in which we use $A_{\bar{\sigma}}$ (or $B_{\bar{\sigma}}$) to represent the binomial random variable with parameter $\A$ (or $\B$)
+respectively and $N_{\bar{\sigma}}$ is a deterministic positive number, irrelevant with the graph structure.
+
+When $r\leq \frac{n}{\sqrt{\log n}}$, we can show that $\dist(\sigma, X) = r$ implies $D(\sigma, X)$ by using the triangle
+inequality of $\dist$. For $f \in S_k \backslash \{ id \}$, we have
+$$
+\frac{2n}{k} \leq \dist(f(X), X) \leq \dist(\sigma, f(X)) + \dist(\sigma, X)
+$$
+Therefore, $\dist(\sigma, f(X)) \geq \frac{2n}{k} - \frac{n}{\sqrt{\log n}} \geq \dist(\sigma, X)$ and
+\eqref{eq:psigmaX} is equivalent with
+\begin{equation}\label{eq:psigmaX2}
+\frac{P_{\sigma|G}(\dist(\sigma, X)=r)}
+{P_{\sigma|G}(\sigma=X)} <
+n^{r \tilde{g}(\beta) /2}
+\end{equation}
+The left hand side can be written as:
+\begin{align*}
+\frac{P_{\sigma|G}(\dist(\sigma, X)=r)}
+{P_{\sigma|G}(\sigma=X)}  &= \sum_{\dist(\bar{\sigma}, X)=r}\exp(-\beta(H(\bar{\sigma})-H(X)))\\
+&\leq \sum_{\dist(\bar{\sigma}, X)=r}\exp(\beta_n(B_{\bar{\sigma}}-A_{\bar{\sigma}}))
+\end{align*}
+where $\beta_n = \beta(1+\gamma\frac{\log n}{n})$.
+
+Define $\Xi_n(r): = \sum_{\dist(\bar{\sigma}, X)=r}\exp(\beta_n(B_{\bar{\sigma}}-A_{\bar{\sigma}}))$ and we only need to show that
+\begin{equation}
+P_{G}(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2}) \leq  n^{r (\tilde{g}(\beta) /2 + \epsilon)}
+\end{equation}
+Define the event $\Lambda_n(G,r):=\{B_{\bar{\sigma}} -A_{\bar{\sigma}} < 0, \forall \dist(\bar{\sigma}, X)=r\}$,
+we proceed as follows:
+\begin{align*}
+P_{G}(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2}) &\leq
+P_G(\Lambda_n(G,r)^c) \\
+&+ P_G(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2} |\Lambda_n(G,r) )
+\end{align*}
+For the first term, 
+$P_G(\Lambda_n(G,r)^c) \leq n^{rg(\bar{\beta})} \leq n^{r (\tilde{g}(\beta) /2 + \epsilon/2)}$.
+For the second term, we use Markov inequality:
+\begin{align*}
+P_G(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2} |\Lambda_n(G,r) )
+\leq \mathbb{E}[\Xi_n(r)|\Lambda_n(G,r)]n^{-r \tilde{g}(\beta) /2} 
+\end{align*}
+The conditional expectation can be estimated as follows:
+\begin{align*}
+&\mathbb{E}[\Xi_n(r)|\Lambda_n(G,r)]=
+\sum_{\dist(\bar{\sigma}, X) = r}\sum_{tr\log n = -\infty }^{-1} \\
+& P_G(B_{\bar{\sigma}} -A_{\bar{\sigma}}=tr\log n)\exp(\beta_n tr \log n) \\
+& \leq (k-1)^r n^{r+r\beta(b-a)/k} +
+\sum_{\dist(\bar{\sigma}, X) = r}\sum_{tr\log n = r(b-a)/k\log n }^{-1} \\
+& P_G(B_{\bar{\sigma}} -A_{\bar{\sigma}}=t\log n)\exp(\beta_n rt \log n)
+\end{align*}
+$r+r\beta(b-a)/k = f_{\beta}(\frac{b-a}{k}) < \tilde{g}(\beta)$, therefore,
+$(k-1)^r n^{r+r\beta(b-a)/k}n^{-r \tilde{g}(\beta) /2} \leq n^{r (\tilde{g}(\beta) /2 + \epsilon/2)} $.
+Using Lemma 6 in \cite{sibmmc}, we have
+\begin{align*}
+P_G(B_{\bar{\sigma}} -A_{\bar{\sigma}}=t\log n)\exp(\beta_n rt \log n) \leq 
+n^{r(f_{\beta_n}(t)-1 + O(\frac{1}{\sqrt{\log n}}))}
+\end{align*}
+Since $\beta_n \to \beta$, $\forall \epsilon$, when $n$ is sufficiently large
+we have $\tilde{g}(\beta_n) \leq \tilde{g}(\beta) + \epsilon /2$.
+Therefore,
+\begin{align*}
+&\sum_{\dist(\bar{\sigma}, X) = r}\sum_{\substack{tr\log n = \\ r(b-a)/k\log n} }^{-1}
+P_G(B_{\bar{\sigma}} -A_{\bar{\sigma}}=t\log n)\exp(\beta_n rt \log n) \\
+& \leq  n^{r(\tilde{g}(\beta_n) - \tilde{g}(\beta)/2)}\\
+& \leq  n^{r(\tilde{g}(\beta)/2 + \epsilon/2)} O(\log n) (k-1)^r
+\end{align*}
+Combining the above equations, we have
+\begin{align*}
+P_{G}(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2}) &\leq  n^{r(\tilde{g}(\beta)/2 + \epsilon/2)} O(\log n) (k-1)^r\\
+&\leq n^{r(\tilde{g}(\beta)/2 + \epsilon)}
+\end{align*}
+
 \end{document}
