@@ -6,6 +6,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 \newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 \newcommand{\A}{\frac{a \log(n)}{n}}
 \newcommand{\B}{\frac{b \log(n)}{n}}
@@ -166,25 +167,24 @@ exact recovery is possible if and only if $\sqrt{a} - \sqrt{b} > \sqrt{k}$ \cite
 Now we have defined SBM and its exact recovery problem, the definition of Ising model on a graph genered by SBM is given
 as follows:
 \begin{definition}[Ising model with $k$ states]\label{def:ising}
-	The Ising model on a graph $G$ sampled from $\SSBM(n,k,\A,\B)$ with parameters $\alpha,\beta>0$ is a probability distribution on the configurations $\sigma\in W^n$ such that
+	The Ising model on a graph $G$ sampled from $\SSBM(n,k,\A,\B)$ with parameters $\gamma,\beta>0$ is a probability distribution on the configurations $\sigma\in W^n$ such that
 	\begin{align} \label{eq:isingma}
-	&P_{\sigma|G}(\sigma=\bar{\sigma})=\frac{1}{Z_G(\alpha,\beta)}
-	\exp\Big(\beta \sum_{\{i,j\}\in E(G)}\delta(\bar{\sigma}_i, \bar{\sigma}_j) \notag\\
-	&-\frac{\alpha\log(n)}{n} \sum_{\{i,j\}\notin E(G)} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
-	\Big)
+	P_{\sigma|G}(\sigma=\bar{\sigma})=\frac{\exp(-\beta H(\bar{\sigma}))}{Z_G(\alpha,\beta)}
 	\end{align}
-	where the subscript in $P_{\sigma|G}$ indicates that the distribution depends on $G$, and
+	where
+	\begin{equation}
+	H(\bar{\sigma}) = \gamma \frac{\log n}{n} \sum_{\{i,j\}\not\in E(G)} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
+	- \sum_{\{i,j\}\in E(G)} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
+	\end{equation}	
+	The subscript in $P_{\sigma|G}$ indicates that the distribution depends on $G$, and
 	$Z_G(\alpha,\beta)$ is the normalizing constant for this distribution.
 \end{definition}
 In physics, we often call $\beta$ the inverse temperature and $Z_G(\alpha, \beta)$ the partition function.
-The Hamiltonian energy $H(\bar{\sigma})$ is given by:
-\begin{equation}
-H(\bar{\sigma}) = \gamma \frac{\log n}{n} \sum_{\{i,j\}\not\in E(G)} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
-- \sum_{\{i,j\}\in E(G)} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
-\end{equation}
-where $\gamma = \frac{\alpha}{\beta}$.
-
-Then the probability of each configuration is proportional to $\exp(-\beta H(\bar{\sigma}))$, and the configuration with largest
+The Hamiltonian energy $H(\bar{\sigma})$ consists of two terms: the repulsive interaction between nodes without edge connection
+and the attractive interaction between nodes with edge connection. The term $\gamma$ is the ratio of the power of these two
+interactions. We should add $\frac{\log n}{n}$ to balance the two terms because there are only $O(\frac{n}{\log n})$
+connecting edges for each node.
+The probability of each configuration is proportional to $\exp(-\beta H(\bar{\sigma}))$, and the configuration with largest
 probability corresponds to the lowest energy.
 
 There are two main difference of Definition \ref{def:ising} with the classical one. Firstly we add a compulsory term
@@ -218,7 +218,7 @@ where $\bar{\beta} = \min_{\beta > 0} g(\beta)$.
 Let $\beta^*$ be the solution to the equation $g(\beta) = 0$ and $\beta^* < \bar{\beta}$, then depending on
 how $(\gamma, \beta)$ take values, we have
 \begin{enumerate}
-\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in S_k(X)) \leq (1+o(1))n^{\tilde{g}(\beta)/2}$;
+\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in S_k(X)) \leq (k+o(1))n^{\tilde{g}(\beta)/2}$;
 \item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in \Lambda) \leq (1+o(1))n^{\tilde{g}(\beta)/2}$;
 \item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
 n^{-g(\beta)} \}$;
@@ -226,14 +226,18 @@ n^{-g(\beta)} \}$;
 n^{-g(\beta)} \}$;
 \end{enumerate}
 \end{theorem}
-Theorem \ref{thm:phase_transition} has established the sharp phase transition property of SIBM model.
-Generally speaking, there are two transition thresholds on the $(\gamma, \beta)$ plane.
-Let $D(\sigma, \sigma')$ be the event when $\sigma$ is nearest to $\sigma'$ among all its permutation.
+By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
+As $n \to \infty$, the probability mentioned in Theorem \ref{thm:phase_transition} converges to $0$ at least
+in polynomial speed.
+Therefore, Theorem \ref{thm:phase_transition} establishes the sharp phase transition property of SIBM model.
+Generally speaking, there are two transition thresholds on the $(\gamma, \beta)$ plane. To illustrate Theorem
+\ref{thm:phase_transition} more clearly,
+let $D(\sigma, \sigma')$ be the event when $\sigma$ is nearest to $\sigma'$ among all its permutation.
 That is
 \begin{equation}
 D(\sigma, \sigma') := \{ \sigma = \arg\min_{f \in S_k} \dist(f(\sigma), \sigma')  \}
 \end{equation}
-Theorem 1 can also be stated in the following way:
+Then Theorem 1 can be stated in the following way:
 \begin{corollary}\label{cor:phase4}
 \begin{enumerate}
 	\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = 1-o(1)$;
@@ -244,7 +248,112 @@ Theorem 1 can also be stated in the following way:
 \end{corollary}
 Corollary \ref{cor:phase4} is illustrated in Diagram.
 
-We can generate multiple independent samples from SIBM $\{\sigma^{(1)}, \dots, \sigma^{(m)}\}$, similar to the exact recovery problem of SBM, a natural question related with SIBM is how many samples are sufficient and necessary to recovery $X$?
+The rest of this section is devoted to the proof of Theorem \ref{thm:phase_transition}, which relies on the
+careful analysis on the one-flip energy difference. This useful result is summarized in the following lemma:
+\begin{lemma}\label{lem:lemmaDiff}
+	Suppose $\bar{\sigma}'$ differs from $\bar{\sigma}$ only at position $r$ by $\bar{\sigma}'_r = \omega^s \cdot \bar{\sigma}_r$.
+	Then the change of energy is
+	\begin{align}
+	H(\bar{\sigma}') - H(\bar{\sigma}) &= (1+\gamma \frac{\log n}{n})\sum_{i \in N_r(G)} J_s(\bar{\sigma}_r, \bar{\sigma}_i)
+	\notag \\
+	&- \gamma \frac{\log n}{n} (m(\bar{\sigma}_r)-m(\omega^s \cdot \bar{\sigma}_r)-1) 
+	\end{align}
+	where $m(\omega^j) := |\{i \in [n] | \bar{\sigma}_i = \omega^j | \}$ and $J_s(x, y) = \delta(x, y) - \delta(\omega_s \cdot x, y)$
+\end{lemma}
+Lemma \ref{lem:lemmaDiff} gives an explicit way to compare the probability of two configurations by the following
+equality:
+\begin{equation}\label{eq:Pratio}
+\frac{P_{\sigma |G } (\sigma = \bar{\sigma}')}{P_{\sigma |G } (\sigma = \bar{\sigma})}
+= \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma})))
+\end{equation}
+Besides, since the graph is sparse and every node has $O(\log n)$ neighbors, the computational cost for the energy difference
+is also $O(\log n)$. 
+
+When $H(\bar{\sigma}') < H(\bar{\sigma})$, we can expect $P_{\sigma | G}(\sigma = \bar{\sigma}')$ is far less than 
+$P_{\sigma | G}(\sigma = \bar{\sigma})$. However,
+since $G$ is sampled from SBM, the righthand side of \eqref{eq:Pratio} is a random variable. The stochastic behaviour
+of $ \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) $ plays an important role when establishing Theorem \ref{thm:phase_transition}.
+The case $\gamma > b$ has been analyzed in great detail in \cite{sibmmc}, here we enhance the existing result in the following lemma:
+\begin{lemma}\label{lem:specialCase}
+If $\gamma> b$ and $\beta > \beta^*$, there exists a set $\cG'_n$ such that
+$P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and for every $G\in \cG'_n$
+\begin{equation}
+\frac{P_{\sigma |G } (\sigma = \bar{\sigma}')}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2-1}
+\end{equation}
+where $\dist(\bar{\sigma}',X)=1$.
+\end{lemma}
+\begin{proof}
+	From \eqref{eq:Pratio}, we only need to show that
+	\begin{equation}\label{eq:beta_HP}
+	P_G( \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) \geq n^{\tilde{g}(\beta)/2-1}) \leq (1+o(1))n^{\tilde{g}(\beta)/2}
+	\end{equation}
+	Taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
+	$$
+	H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_n - A^s_n) + \gamma\frac{\log n}{n}
+	$$
+	where $A_n^0 \sim Binom(\frac{n}{k}-1, \A)$ and $A^s_n \sim Binom(\frac{n}{k}, \B)$.
+	Therefore, \eqref{eq:beta_HP} is equivalent with
+	\begin{equation}\label{eq:pgAs}
+	P_G\big(A^s_n - A_n^0 \geq t\log n\big)
+	\leq (1+o(1))n^{\tilde{g}(\beta)/2}
+	\end{equation}
+	where $t=(1+o(1))\frac{1}{\beta}(\frac{\tilde{g}(\beta)}{2} -1)>\beta\frac{b-a}{k}+1$ and the $o(1)$ term is not random.
+	\eqref{eq:pgAs} follows directly from Lemma 1 of \cite{sibmmc}.
+\end{proof}
+Since 
+$\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} = \sum_{s=1}^{k-1}
+\sum_{i=1}^n \frac{P_{\sigma |G } (\sigma = \bar{\sigma}'(s,i))}{P_{\sigma |G } (\sigma = X)}$ 
+where $\bar{\sigma}'(s,i)$ only differs from $X$ by $\bar{\sigma}'_i = \omega^s \cdot X_i$.
+In such a case, we can show that there exists a set $\cG'_n$
+$P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and 
+$\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2}$.
+Or more generally, we have the following proposition
+\begin{proposition}\label{prop:small}
+If $\gamma>b$, $\beta>\beta^\ast$,
+then there is a set $\cG^{(r)}$ such that
+\begin{equation}\label{eq:Gr}
+P(G\in\cG^{(r)}_n) \ge 1 - (k-1)^r n^{r\tilde{g}(\beta)/2}
+\end{equation}
+and
+for every $G\in\cG^{(r)}_n$,
+\begin{equation}\label{eq:psigmaX}
+\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
+{P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
+n^{r \tilde{g}(\beta) /2}
+\end{equation}
+\end{proposition}
+We may tend to use Lemma \ref{lem:specialCase} to establish Proposition \ref{prop:small}. However, the set $\cG_n'$ may depend
+on $(i,r)$ and it is not a good idea to use union bound to get the proper set. The rigorous proof relies on
+proper choice of $\cG_n^{(r)}$
+and is given in
+the appendix.
+
+Now we use Proposition \ref{prop:small} to show 1) of Theorem \ref{thm:phase_transition}.
+\begin{proof}[Proof of Theorem \ref{thm:phase_transition} 1)]
+Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
+we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq (k+o(1))n^{\tilde{g}(\beta)/2}$.
+Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, from \eqref{eq:Gr} we have
+\begin{align*}
+P_G(\cG'^c_n) &= P_G(\cup_{r=1}^n (\cG_n^{(r)})^c) \\
+&\leq \sum_{r=1}^n (k-1)^r n^{r\tilde{g}(\beta)/2} \\
+&=(k-1 + o(1)) n^{\tilde{g}(\beta)/2}
+\end{align*}
+where the last equality follows from the estimation of sum of geometric series.
+On the other hand, for every $G \in \cG'_n$, from \eqref{eq:psigmaX}
+we have
+\begin{align*}
+\frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{1-P_{\sigma | G}(\sigma \neq X | D(\sigma, X))} &= \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \\
+&< \sum_{r=1}^{n}  n^{r\tilde{g}(\beta)/2}
+\end{align*}
+from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq (1+o(1))n^{\tilde{g}(\beta)/2}$
+Finally, 
+\begin{align*}
+P_{\SIBM}(\sigma \neq X|D(\sigma, X)) &= \sum_{G\in \cG'_n} P_G(G)P_{\sigma |G}(\sigma \neq X | D(\sigma, X)) \\
++ P_G(\cG'^c_n)
+& \leq (k+o(1)) n^{\tilde{g}(\beta)/2}
+\end{align*}
+\end{proof}
+
 
 \section{Degree-corrected Stochastic Ising Block Model}\label{sec:dcsibm}
 \section{Parameter Estimation of SBM}\label{sec:psbm}
