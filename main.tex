@@ -11,6 +11,7 @@
 \newcommand{\A}{\frac{a \log(n)}{n}}
 \newcommand{\B}{\frac{b \log(n)}{n}}
 \newcommand{\cG}{\mathcal{G}}
+\DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\SSBM}{SSBM}
 \DeclareMathOperator{\SIBM}{SIBM}
 \DeclareMathOperator{\dist}{dist}
@@ -212,16 +213,19 @@ g(\beta) = \frac{be^{\beta} + a e^{-\beta}}{k} - \frac{a+b}{k} +1
 \end{equation}
 and
 \begin{equation}
-\tilde{g}(\beta) = \max\{g(\beta), g(\bar{\beta})\}
+\tilde{g}(\beta) = \begin{cases}
+g(\beta) & \beta \leq \bar{\beta} \\
+g(\bar{\beta}) & \beta > \bar{\beta}
+\end{cases}
 \end{equation}
-where $\bar{\beta} = \min_{\beta > 0} g(\beta)$.
+where $\bar{\beta} =  \arg\min_{\beta > 0} g(\beta)$.
 Let $\beta^*$ be the solution to the equation $g(\beta) = 0$ and $\beta^* < \bar{\beta}$, then depending on
-how $(\gamma, \beta)$ take values, we have
+how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficiently large, we have
 \begin{enumerate}
-\item If $\gamma > b$ and $\beta > \beta^*$, $\forall \epsilon > 0, P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
-\item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in \Lambda) \leq (1+o(1))n^{\tilde{g}(\beta)/2}$;
+\item If $\gamma > b$ and $\beta > \beta^*$,  $P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
 \item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
-n^{-g(\beta)} \}$;
+n^{-g(\beta)+ \epsilon} \}$;
+\item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in \Lambda) \leq (1+o(1))n^{\tilde{g}(\beta)/2}$;
 \item If $\gamma < b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in \Lambda) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
 n^{-g(\beta)} \}$;
 \end{enumerate}
@@ -241,8 +245,8 @@ Then Theorem 1 can be stated in the following way:
 \begin{corollary}\label{cor:phase4}
 \begin{enumerate}
 	\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = 1-o(1)$;
-	\item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = \mathbf{1} | D(\sigma,  \mathbf{1}))  = 1-o(1)$;
 	\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = o(1)$;
+\item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = \mathbf{1} | D(\sigma,  \mathbf{1}))  = 1-o(1)$;	
 	\item If $\gamma < b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma = \mathbf{1}| D(\sigma,  \mathbf{1}))  =  o(1)$;
 \end{enumerate}	
 \end{corollary}
@@ -289,12 +293,12 @@ where $\dist(\bar{\sigma}',X)=1$.
 	\end{equation}
 	Taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
 	\begin{equation}\label{eq:energy_diff}
-	H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_n - A^s_n) + \gamma\frac{\log n}{n}
+	H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_r - A^s_r) + \gamma\frac{\log n}{n}
 	\end{equation}
-	where $A_n^0 \sim Binom(\frac{n}{k}-1, \A)$ and $A^s_n \sim Binom(\frac{n}{k}, \B)$.
+	where $A_r^0 \sim Binom(\frac{n}{k}-1, \A)$ and $A^s_r \sim Binom(\frac{n}{k}, \B)$.
 	Therefore, \eqref{eq:beta_HP} is equivalent with
 	\begin{equation}\label{eq:pgAs}
-	P_G\big(A^s_n - A_n^0 \geq t\log n\big)
+	P_G\big(A^s_r - A_r^0 \geq t\log n\big)
 	\leq (1+o(1))n^{\tilde{g}(\beta)/2}
 	\end{equation}
 	where $t=(1+o(1))\frac{1}{\beta}(\frac{\tilde{g}(\beta)}{2} -1)>\beta\frac{b-a}{k}+1$ and the $o(1)$ term is not random.
@@ -302,17 +306,18 @@ where $\dist(\bar{\sigma}',X)=1$.
 \end{proof}
 Since 
 $\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} = \sum_{s=1}^{k-1}
-\sum_{i=1}^n \frac{P_{\sigma |G } (\sigma = \bar{\sigma}'(s,i))}{P_{\sigma |G } (\sigma = X)}$ 
-where $\bar{\sigma}'(s,i)$ only differs from $X$ by $\bar{\sigma}'_i = \omega^s \cdot X_i$.
+\sum_{r=1}^n \frac{P_{\sigma |G } (\sigma = \bar{\sigma}'(s,r))}{P_{\sigma |G } (\sigma = X)}$ 
+where $\bar{\sigma}'(s,r)$ only differs from $X$ by $\bar{\sigma}'_r = \omega^s \cdot X_r$.
 In such a case, we can show that there exists a set $\cG'_n$
 $P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and 
 $\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2}$.
 Or more generally, we have the following proposition
 \begin{proposition}\label{prop:small}
 If $\gamma>b$, $\beta>\beta^\ast$,
-then $\forall \epsilon > 0$ there is a set $\cG^{(r)}$ such that
+For $1\leq r \leq \frac{n}{\sqrt{\log n}}$
+and $\forall \epsilon > 0$, there is a set $\cG^{(r)}$ such that
 \begin{equation}\label{eq:Gr}
-P(G\in\cG^{(r)}_n) \ge 1 - n^{r(\tilde{g}(\beta)/2 + \epsilon)}
+P_G(\cG^{(r)}_n) \ge 1 - n^{r(\tilde{g}(\beta)/2 + \epsilon)}
 \end{equation}
 and
 for every $G\in\cG^{(r)}_n$,
@@ -320,6 +325,17 @@ for every $G\in\cG^{(r)}_n$,
 \frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
 {P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
 n^{r \tilde{g}(\beta) /2}
+\end{equation}
+For $r> \frac{n}{\sqrt{\log n}}$, there is a set $\cG^{(r)}$ such that
+\begin{equation}\label{eq:Gr1}
+P(G\in\cG^{(r)}_n) \ge 1 - e^{-n}
+\end{equation}
+and
+for every $G\in\cG^{(r)}_n$,
+\begin{equation}\label{eq:psigmaX1}
+\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
+{P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
+e^{-n}
 \end{equation}
 \end{proposition}
 We may tend to use Lemma \ref{lem:specialCase} to establish Proposition \ref{prop:small}. However, the set $\cG_n'$ may depend
@@ -329,13 +345,13 @@ and is given in
 the appendix.
 
 Now we use Proposition \ref{prop:small} to show 1) of Theorem \ref{thm:phase_transition}.
-\begin{proof}[Proof of Theorem \ref{thm:phase_transition} 1)]
+\begin{proof}[Proof of Theorem \ref{thm:phase_transition}]
 Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
 we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq k n^{\tilde{g}(\beta)/2 + \epsilon}$.
 Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, choose $\frac{\epsilon}{2}$, from \eqref{eq:Gr} we have
 \begin{align*}
 P_G(\cG'^c_n) &= P_G(\cup_{r=1}^n (\cG_n^{(r)})^c) \\
-&\leq \sum_{r=1}^n n^{r(\tilde{g}(\beta)/2 + \epsilon/2)} \\
+&\leq \sum_{r=1}^{n/\sqrt{\log n } } n^{r(\tilde{g}(\beta)/2 + \epsilon/2)}  + n e^{-n} \\
 & \leq \frac{1}{2} n^{\tilde{g}(\beta)/2 + \epsilon}
 \end{align*}
 where the last equality follows from the estimation of sum of geometric series.
@@ -343,18 +359,48 @@ On the other hand, for every $G \in \cG'_n$, from \eqref{eq:psigmaX}
 we have
 \begin{align*}
 \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{1-P_{\sigma | G}(\sigma \neq X | D(\sigma, X))} &= \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \\
-&< \sum_{r=1}^{n}  n^{r\tilde{g}(\beta)/2}
+&< \sum_{r=1}^{n/\sqrt{\log n }}  n^{r\tilde{g}(\beta)/2} + n e^{-n}
 \end{align*}
-from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq \frac{1}{2}n^{\tilde{g}(\beta)/2 + \epsilon}$
+from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq \frac{1}{2}n^{\tilde{g}(\beta)/2 + \epsilon}$.
 Finally, 
 \begin{align*}
 P_{\SIBM}(\sigma \neq X|D(\sigma, X)) &= \sum_{G\in \cG'_n} P_G(G)P_{\sigma |G}(\sigma \neq X | D(\sigma, X)) \\
 + P_G(\cG'^c_n)
 & \leq n^{\tilde{g}(\beta)/2 + \epsilon}
 \end{align*}
+
 \end{proof}
-
-
+If $\gamma > b$ and $\beta < \beta^*$, we have the following proposition:
+\begin{proposition}\label{prop:large2}
+	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG'_n$ such that
+	\begin{equation}
+	P_G(\cG'_n) \geq 1 - (1+o(1))n^{g(\bar{\beta})}
+	\end{equation}
+	and for every $G \in \cG'_n$,
+	\begin{equation}\label{eq:diff1g}
+	\frac{P_{\sigma|G}(\dist(\sigma, X)=1 | D(\sigma, X))}
+	{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \geq (1+o(1))n^{g(\beta_n)}
+	\end{equation}
+	where $\beta_n = \beta(1+\gamma\frac{\log n}{n})$.
+\end{proposition}
+We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:phase_transition}.
+\begin{proof}
+	Using Proposition \ref{prop:large2}, for every $G \in \cG'_n$
+	we can get
+	$$
+	\frac{1-P_{\sigma | G}(\sigma=X | D(\sigma, X))}{P_{\sigma | G}(\sigma=X | D(\sigma, X))}\geq (1+o(1))n^{g(\beta_n)}
+	$$
+	We then have
+	$$
+	P_{\sigma | G}(\sigma=X| D(\sigma, X)) \leq (1+o(1)) n^{-g(\beta_n)}
+	$$
+	Then
+	\begin{align*}
+	P_{\SIBM}(\sigma=X| D(\sigma, X)) & \leq P(\cG'^c_n) + \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
+	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) n^{-g(\beta_n)}\\
+	& \leq (1+o(1)) \min\{n^{g(\bar{\beta})},n^{-g(\beta) + \epsilon}  \}
+	\end{align*}
+\end{proof}
 \section{Degree-corrected Stochastic Ising Block Model}\label{sec:dcsibm}
 \section{Parameter Estimation of SBM}\label{sec:psbm}
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
@@ -391,7 +437,7 @@ The left hand side can be written as:
 {P_{\sigma|G}(\sigma=X)}  &= \sum_{\dist(\bar{\sigma}, X)=r}\exp(-\beta(H(\bar{\sigma})-H(X)))\\
 &\leq \sum_{\dist(\bar{\sigma}, X)=r}\exp(\beta_n(B_{\bar{\sigma}}-A_{\bar{\sigma}}))
 \end{align*}
-where $\beta_n = \beta(1+\gamma\frac{\log n}{n})$.
+
 
 Define $\Xi_n(r): = \sum_{\dist(\bar{\sigma}, X)=r}\exp(\beta_n(B_{\bar{\sigma}}-A_{\bar{\sigma}}))$ and we only need to show that
 \begin{equation}
@@ -441,5 +487,46 @@ Combining the above equations, we have
 P_{G}(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2}) &\leq  n^{r(\tilde{g}(\beta)/2 + \epsilon/2)} O(\log n) (k-1)^r\\
 &\leq n^{r(\tilde{g}(\beta)/2 + \epsilon)}
 \end{align*}
+When $r>\frac{n}{\sqrt{\log n}}$, using Lemma 5 from \cite{sibmmc}, we can choose a sufficiently large constant $C>1$
+such that $k^n\exp(-Cn) < e^{-n}$
+\begin{align*}
+\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
+{P_{\sigma|G}(\sigma=X | D(\sigma, X))} &= \sum_{\substack{D(\sigma, X) \\ \dist(\sigma, X)=r}} \frac{P_{\sigma | G}(\sigma = \bar{\sigma}) }{P_{\sigma | X}(\sigma = X)} \\
+&> \exp(-Cn)
+\end{align*}
+happens with probability less than $e^{-n}$. Therefore, \eqref{eq:psigmaX1} holds.
 
+\section*{Proof of Proposition \ref{prop:large2}}
+The left hand of \eqref{eq:diff1g} can be rewritten as:
+\begin{equation}\label{eq:knd}
+	\frac{P_{\sigma|G}(\dist(\sigma, X)=1)}
+{P_{\sigma|G}(\sigma=X)}= (1+o(1))\sum_{s=1}^{k-1}\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0))
+\end{equation}
+From Proposition 7, there is a set $\cG^{(1)}_n$ such that $P_G(\cG^{(1)}_n) \geq 1-n^{g(\bar{\beta})}$
+and
+\begin{align}
+\mathbb{E}[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= (1+o(1))n^{g(\beta_n)} \\
+\Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= \Theta(n^{2g(\beta_n)-1}\log n)
+\end{align}
+Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n) - \epsilon} \}$,
+
+Using Chebyshev inequality, we have
+\begin{equation*}
+P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq \Theta(n^{2\epsilon - 1} \log n) 
+\end{equation*}
+Let $\cG'_n = \cG^{(1)}_n \cap \cG^{(2)}_n$
+\begin{align*}
+P_G(G \in \cG'_n) &= P_G(\cG^{(1)}_n) P_G(G \in \cG_n^{(2)} | G \in \cG_n^{(1)}) \\
+& \geq (1-\Theta(n^{2\epsilon - 1} \log n))(1-n^{g(\beta_n)}) \\
+&= 1-(1+o(1))n^{g(\beta_n)}
+\end{align*}
+and for every $G\in\cG'_n$,
+\begin{equation*}
+\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) = (1+o(1)) n^{g(\beta_n)}
+\end{equation*}
+Therefore, from \eqref{eq:knd} we have
+\begin{equation*}
+	\frac{P_{\sigma|G}(\dist(\sigma, X)=1)}
+{P_{\sigma|G}(\sigma=X)} \geq (1+o(1)) n^{g(\beta_n)}
+\end{equation*}
 \end{document}
