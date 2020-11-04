@@ -11,6 +11,7 @@
 \newcommand{\A}{\frac{a \log(n)}{n}}
 \newcommand{\B}{\frac{b \log(n)}{n}}
 \newcommand{\cG}{\mathcal{G}}
+\newcommand{\1}{\mathbbm{1}}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\SSBM}{SSBM}
 \DeclareMathOperator{\SIBM}{SIBM}
@@ -225,9 +226,6 @@ how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficien
 \item If $\gamma > b$ and $\beta > \beta^*$,  $P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
 \item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
 n^{-g(\beta)+ \epsilon} \}$;
-\item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma \not\in \Lambda) \leq (1+o(1))n^{\tilde{g}(\beta)/2}$;
-\item If $\gamma < b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in \Lambda) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
-n^{-g(\beta)} \}$;
 \end{enumerate}
 \end{theorem}
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
@@ -246,8 +244,6 @@ Then Theorem 1 can be stated in the following way:
 \begin{enumerate}
 	\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = 1-o(1)$;
 	\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = o(1)$;
-\item If $\gamma < b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = \mathbf{1} | D(\sigma,  \mathbf{1}))  = 1-o(1)$;	
-	\item If $\gamma < b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma = \mathbf{1}| D(\sigma,  \mathbf{1}))  =  o(1)$;
 \end{enumerate}	
 \end{corollary}
 Corollary \ref{cor:phase4} is illustrated in Diagram.
@@ -401,6 +397,33 @@ We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:ph
 	& \leq (1+o(1)) \min\{n^{g(\bar{\beta})},n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
 \end{proof}
+When $\gamma < b$, similar to Proposition \ref{prop:small}, we have
+\begin{proposition}
+If $\gamma < b$, $\beta>\beta^\ast$,
+For $1\leq r \leq \frac{n}{\sqrt{\log n}}$
+and $\forall \epsilon > 0$, there is a set $\cG^{(r)}$ such that
+\begin{equation}\label{eq:Gr3}
+P_G(\cG^{(r)}_n) \ge 1 - n^{r(\tilde{g}(\beta)/2 + \epsilon)}
+\end{equation}
+and
+for every $G\in\cG^{(r)}_n$,
+\begin{equation}\label{eq:psigmaX3}
+\frac{P_{\sigma|G}(\dist(\sigma, \1)=r | D(\sigma, \1))}
+{P_{\sigma|G}(\sigma= \1 | D(\sigma,  \1))} <
+n^{r \tilde{g}(\beta) /2}
+\end{equation}
+For $r> \frac{n}{\sqrt{\log n}}$, there is a set $\cG^{(r)}$ such that
+\begin{equation}\label{eq:Gr13}
+P(G\in\cG^{(r)}_n) \ge 1 - e^{-n}
+\end{equation}
+and
+for every $G\in\cG^{(r)}_n$,
+\begin{equation}\label{eq:psigmaX13}
+\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma,  \1))}
+{P_{\sigma|G}(\sigma= \1 | D(\sigma,  \1))} <
+e^{-n}
+\end{equation}
+\end{proposition}
 \section{Degree-corrected Stochastic Ising Block Model}\label{sec:dcsibm}
 \section{Parameter Estimation of SBM}\label{sec:psbm}
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
