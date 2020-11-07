@@ -133,11 +133,11 @@ p & X_i = X_j \\
 q & X_i \neq X_j
 \end{cases}
 \end{equation}
-Then the random graph $G$ is completely specified by $\{Z_{ij}, 1\leq i<j\leq n\}$ in which all $Z_{ij}$ are jointly independent.
+Then the random graph $G$ is completely specified by $Z:=\{Z_{ij}, 1\leq i<j\leq n\}$ in which all $Z_{ij}$ are jointly independent.
 The probability distribution for SBM can be written as:
 \begin{align}
-&P_G(Z_{ij} = z_{ij}, 1\leq i<j\leq n) = p^{\sum_{X_i = X_j} z_{ij}}q^{\sum_{X_i \neq X_j} z_{ij}} \cdot \notag \\
-&\quad (1-p)^{\sum_{X_i = X_j} (1-z_{ij})}(1-q)^{\sum_{X_i \neq X_j} (1-z_{ij})}
+&P_G(Z | X) = p^{\sum_{X_i = X_j} z_{ij}}q^{\sum_{X_i \neq X_j} z_{ij}} \notag \\
+&\cdot \quad (1-p)^{\sum_{X_i = X_j} (1-z_{ij})}(1-q)^{\sum_{X_i \neq X_j} (1-z_{ij})} \label{eq:GmL}
 \end{align}
 We will use the notation $\cG_n$ to represent a set containing all graphs with $n$ nodes. By the normalization property,
 $P_G(\cG_n) = \sum_{G\in \cG_n}P_G(G)=1$.
@@ -411,9 +411,31 @@ configuration. Or equivalently, by minimizing the enery term in \eqref{eq:energy
 When $\gamma > b$,  for any $\epsilon > 0$ and $n$ sufficiently large, $P_G(\hat{X} \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2+\epsilon}$
 \end{corollary}
 The energy has only one parameter $\gamma$, when it takes different values depending on $a,b$, minimizing the
-energy is equivalent with some popular algorithms in asymptotic case:
-\begin{remark}
-\end{remark}
+energy is equivalent with some popular algorithms in asymptotic case. The following analysis shows
+their relationship intuitively.
+
+For maximum likelihood, from \eqref{eq:GmL} we can write
+$$
+\log P_G(Z|X=\sigma) = -\log\frac{a}{b} \cdot H(\sigma) + C
+$$
+where $\gamma \frac{\log n}{n} = \frac{1}{\log(a/b)}(\log (1-\A) - \log (1-\B))$ and $C$ is a constant irrelevant with $\sigma$.
+When $n$ is sufficiently large, we have $\gamma \to \gamma_{ML} := \frac{a-b}{\log(a/b)}$.
+
+For maximum modularity, we first consider the modularity of a graph, which is defined by
+\begin{align}\label{eq:Q}
+Q &= \frac{1}{2 |E|} \sum_{ij} (A_{ij} - \frac{d_i d_j}{2 |E|}) \delta(C_i, C_j)
+\end{align}
+where $d_i$ is the degree of the $i$-th node and $A$ is the adjacency matrix.
+The modularity $Q$ can be re-written using the node label $\sigma$ as:
+\begin{align}
+Q(\sigma) = &-\sum_{\{i,j\} \not\in E(G) } \frac{d_i d_j}{2 |E|}\delta(\sigma_i,\sigma_j) \notag \\
+&+ \sum_{\{i,j\} \in E(G) } (1 - \frac{d_i d_j}{2 |E|}) \delta(\sigma_i,\sigma_j)  \label{eq:Qtransform}
+\end{align}
+From \eqref{eq:Qtransform}, we can show that $Q(\sigma) \to -H(\sigma)$ with $\gamma = \gamma_{MQ} = \frac{a+b}{2}$ as $n\to \infty$.
+Indeed, we have $d_i \sim \frac{\log n(a+b)}{2}, |E| \sim \frac{1}{2}n d_i$. Therefore, we have $\frac{d_id_j}{2|E|} \to \gamma \frac{\log n}{n} $.
+
+Using $a>b$ and $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions.
+
 \section{Parameter Estimation of SBM}\label{sec:psbm}
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
 \section{Conclusion}
