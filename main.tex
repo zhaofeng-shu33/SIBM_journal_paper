@@ -230,8 +230,8 @@ Let $\beta^*$ be the solution to the equation $g(\beta) = 0$ and $\beta^* < \bar
 how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficiently large, we have
 \begin{enumerate}
 \item If $\gamma > b$ and $\beta > \beta^*$,  $P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
-\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\min\{n^{g(\bar{\beta})},
-n^{-g(\beta)+ \epsilon} \}$;
+\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\max\{n^{g(\bar{\beta})},
+n^{\tilde{g}(2\beta)-g(\beta) + \epsilon}, n^{-g(\beta) + \epsilon}, \frac{\log n}{n^{1-g(\beta)}}  \}$;
 \end{enumerate}
 \end{theorem}
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
@@ -399,7 +399,7 @@ We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:ph
 	\begin{align*}
 	P_{\SIBM}(\sigma=X| D(\sigma, X)) & \leq P(\cG'^c_n) + \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
 	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) n^{-g(\beta_n)}\\
-	& \leq (1+o(1)) \min\{n^{g(\bar{\beta})},n^{-g(\beta) + \epsilon}  \}
+	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})},n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
 \end{proof}
 Since $\beta^*$ is irrelevant with $n$, when $\gamma>b$, we can choose a sufficently small $\beta$ such that
@@ -580,19 +580,22 @@ From Proposition 7, there is a set $\cG^{(1)}_n$ such that $P_G(\cG^{(1)}_n) \ge
 and
 \begin{align}
 \mathbb{E}[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= (1+o(1))n^{g(\beta_n)} \\
-\Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= \Theta(n^{2g(\beta_n)-1}\log n)
+\Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &\leq n^{\tilde{g}(2\beta_n)} \notag \\
+&+ C_n n^{2g(\beta_n)-1}\log n
 \end{align}
-Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n) - \epsilon} \}$,
+where $C_n = be^{2\beta_n}(e^{\beta_n}-1)^2$.
+
+Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n)/2} \}$,
 
 Using Chebyshev inequality, we have
 \begin{equation*}
-P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq \Theta(n^{2\epsilon - 1} \log n) 
+P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq n^{\tilde{g}(2\beta_n) - g(\beta_n)} + C_n n^{g(\beta_n) - 1} \log n
 \end{equation*}
 Let $\cG'_n = \cG^{(1)}_n \cap \cG^{(2)}_n$
 \begin{align*}
 P_G(G \in \cG'_n) &= P_G(\cG^{(1)}_n) P_G(G \in \cG_n^{(2)} | G \in \cG_n^{(1)}) \\
-& \geq (1-\Theta(n^{2\epsilon - 1} \log n))(1-n^{g(\beta_n)}) \\
-&= 1-(1+o(1))n^{g(\beta_n)}
+& \geq (1-\Theta(n^{2\epsilon - 1} \log n))(1-n^{g(\bar{\beta})}) \\
+&= 1-(1+o(1))n^{g(\bar{\beta})}
 \end{align*}
 and for every $G\in\cG'_n$,
 \begin{equation*}
