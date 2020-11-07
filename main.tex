@@ -3,6 +3,9 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{bbm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 \newtheorem{corollary}{Corollary}
@@ -258,7 +261,7 @@ careful analysis on the one-flip energy difference. This useful result is summar
 	\begin{align}
 	H(\bar{\sigma}') - H(\bar{\sigma}) &= (1+\gamma \frac{\log n}{n})\sum_{i \in N_r(G)} J_s(\bar{\sigma}_r, \bar{\sigma}_i)
 	\notag \\
-	&- \gamma \frac{\log n}{n} (m(\bar{\sigma}_r)-m(\omega^s \cdot \bar{\sigma}_r)-1) 
+	&- \gamma \frac{\log n}{n} (m(\bar{\sigma}_r)-m(\omega^s \cdot \bar{\sigma}_r)-1) \label{eq:DeltaH}
 	\end{align}
 	where $m(\omega^j) := |\{i \in [n] | \bar{\sigma}_i = \omega^j | \}$ and $J_s(x, y) = \delta(x, y) - \delta(\omega_s \cdot x, y)$
 \end{lemma}
@@ -438,6 +441,43 @@ Using $a>b$ and $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamm
 
 \section{Parameter Estimation of SBM}\label{sec:psbm}
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
+From Theorem \ref{thm:phase_transition}, if we could sample from the Ising model, then with large probability, the sample
+is aligned with $X$. However, the exact sampling is difficult when $n$ is very large since the state space increases in
+a rate of $k^n$. Therefore, some approximation is
+necessary. The most common way to generate an Ising sample is using Metropolis sampling \cite{metropolis1953equation}. 
+Empirically speaking, starting from a random state, Metropolis algorithm updates the state by randomly selecting one position to flip at each iteration step.
+Then after some initial burning time, the generated samples can be regarded samples from Ising model.
+
+The theoretical guarantee of Metropolis sampling is based on Markov chain. Under some general conditions, Metropolis samples are converging to
+the steady state of Markov chain. For Ising model, there is many previous works which have shown that
+the convergence of Metropolis sampling \cite{diaconis1998we}.
+
+For our specific Ising model and energy term in \eqref{eq:energy},
+the pseudo code of our algorithm is summarized in \ref{alg:m}.
+This algorithm requires the number of the communities $k$ to be known and the parameter $\gamma$ is given.
+The iteration time $N$ should also be specified.
+\begin{algorithm}[H]
+	\caption{Metropolis sampling algorithm for SBM} \label{alg:m}
+	Inputs: the graph $G$, inverse temperature $\beta$, disassortative power $\gamma$ \\
+	Output: $\hat{X}$
+	\begin{algorithmic}[1]
+		\STATE random initialize $\sigma \in W^n$
+		\FOR{$i=1,2,\dots, N$}
+		\STATE propose a new state $\bar{\sigma}'$ according to Lemma \ref{lem:lemmaDiff} where $s, r$ are randomly chosen
+		\STATE compute $\Delta H(r,s) = H(\bar{\sigma}') - H(\bar{\sigma})$ using \eqref{eq:DeltaH}
+		\IF{$\Delta H(r,s)<0$}
+		\STATE $\sigma_r \leftarrow w^s \cdot \sigma_r$
+		\ELSE
+		\STATE with probability $\exp(-\beta \Delta H(r,s))$
+			such that $\sigma_r \leftarrow w^s \cdot \sigma_r$
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+The computation of $\Delta H(r,s)$ needs $O(\log n)$ time. Generally speaking, when there is disassortative interaction in
+the Ising model, it needs to take $N=O(n\log n)$ to generate the sample for good approximation \cite{mcmc}.
+Under such assumption, the time complexity of Algorithm \ref{alg:m} is $n \log^2 n$.
+
 \section{Conclusion}
 \bibliographystyle{IEEEtran}
 \bibliography{exportlist}
