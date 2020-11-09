@@ -221,8 +221,8 @@ g(\beta) = \frac{be^{\beta} + a e^{-\beta}}{k} - \frac{a+b}{k} +1
 and
 \begin{equation}
 \tilde{g}(\beta) = \begin{cases}
-g(\beta) & \beta \leq \bar{\beta} \\
-g(\bar{\beta}) & \beta > \bar{\beta}
+g(\beta) & \beta \leq \bar{\beta} = \frac{1}{2}\log \frac{a}{b} \\
+g(\bar{\beta}) = 1 - \frac{(\sqrt{a} - \sqrt{b})^2}{k} & \beta > \bar{\beta}
 \end{cases}
 \end{equation}
 where $\bar{\beta} =  \arg\min_{\beta > 0} g(\beta)$.
@@ -231,7 +231,7 @@ how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficien
 \begin{enumerate}
 \item If $\gamma > b$ and $\beta > \beta^*$,  $P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
 \item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\max\{n^{g(\bar{\beta})},
-n^{\tilde{g}(2\beta)-g(\beta) + \epsilon}, n^{-g(\beta) + \epsilon}, \frac{\log n}{n^{1-g(\beta)}}  \}$;
+n^{\tilde{g}(2\beta)-g(\beta)+\epsilon}, n^{-g(\beta) + \epsilon}\}$;
 \end{enumerate}
 \end{theorem}
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
@@ -303,8 +303,23 @@ where $\dist(\bar{\sigma}',X)=1$.
 	\leq (1+o(1))n^{\tilde{g}(\beta)/2}
 	\end{equation}
 	where $t=(1+o(1))\frac{1}{\beta}(\frac{\tilde{g}(\beta)}{2} -1)>\beta\frac{b-a}{k}+1$ and the $o(1)$ term is not random.
-	\eqref{eq:pgAs} follows directly from Lemma 1 of \cite{sibmmc}.
+	\eqref{eq:pgAs} follows directly from Lemma \ref{lem:fb}.
+\begin{lemma}[Lemma 1 of \cite{sibmmc}]\label{lem:fb}
+	For $t\in [\frac{1}{k}(b-a), 0]$,
+	define a function
+	\begin{align}
+	&f_{\beta}(t):=\frac{1}{k}\sqrt{k^2t^2+4ab} -\frac{a+b}{k} +1 +\beta t  \notag\\
+	&-t\big(\log(\sqrt{k^2t^2+4ab}+kt)-\log(2b) \big). \label{eq:fbetat}
+	\end{align}
+	It follows that
+	\begin{align} 
+	& P_G(A^1_r-A^0_r\ge t\log n)  \notag\\
+	\le &  \exp\Big(\log n \Big(f_{\beta}(t) -\beta t  - 1 + O\big(\frac{\log n}{n}\big) \Big)\Big) .
+	\end{align}
+	In particular, $P_G(A^1_r-A^0_r\ge 0 ) \leq n^{-\frac{(\sqrt{a}-\sqrt{b})^2}{k}} $.
+\end{lemma}	
 \end{proof}
+
 Since 
 $\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} = \sum_{s=1}^{k-1}
 \sum_{r=1}^n \frac{P_{\sigma |G } (\sigma = \bar{\sigma}'(s,r))}{P_{\sigma |G } (\sigma = X)}$ 
@@ -375,7 +390,7 @@ If $\gamma > b$ and $\beta < \beta^*$, we have the following proposition:
 \begin{proposition}\label{prop:large2}
 	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG'_n$ such that
 	\begin{equation}
-	P_G(\cG'_n) \geq 1 - (1+o(1))n^{g(\bar{\beta})}
+	P_G(\cG'_n) \geq 1 - (1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - g(\beta_n)} \}
 	\end{equation}
 	and for every $G \in \cG'_n$,
 	\begin{equation}\label{eq:diff1g}
@@ -397,22 +412,49 @@ We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:ph
 	$$
 	Then
 	\begin{align*}
-	P_{\SIBM}(\sigma=X| D(\sigma, X)) & \leq P(\cG'^c_n) + \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
-	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) n^{-g(\beta_n)}\\
-	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})},n^{-g(\beta) + \epsilon}  \}
+	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq P(\cG'^c_n) + \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
+	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - g(\beta_n)} \}\\
+	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta) - g(\beta) + \epsilon}, n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
 \end{proof}
-Since $\beta^*$ is irrelevant with $n$, when $\gamma>b$, we can choose a sufficently small $\beta$ such that
-$\beta < \beta^*$, then by Theorem \ref{thm:phase_transition}, with almost 1 probability, $\sigma \in S_k(X)$, which
+\section{Community Detection via energy minimization}
+Since $\beta^*$ is irrelevant with $n$, when $\gamma>b$, we can choose a sufficiently large $\beta$ such that
+$\beta > \beta^*$, then by Theorem \ref{thm:phase_transition}, with almost 1 probability, $\sigma \in S_k(X)$, which
 implies that $P_{\sigma | G}(\sigma = X)$ has largest probability for almost all graph $G$. Instead of generating
 the sample from the Ising model, we can directly maximize the conditional probability to find the most favorable
-configuration. Or equivalently, by minimizing the enery term in \eqref{eq:energy}:
-\begin{equation}
-\hat{X} := \arg\min_{\bar{\sigma}} H(\bar{\sigma})
+configuration. Or equivalently, by minimizing the energy term in \eqref{eq:energy}:
+\begin{equation}\label{eq:hatX}
+\hat{X} := \arg\min_{\bar{\sigma} \in W^n} H(\bar{\sigma})
 \end{equation}
-\begin{corollary}
-When $\gamma > b$,  for any $\epsilon > 0$ and $n$ sufficiently large, $P_G(\hat{X} \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2+\epsilon}$
-\end{corollary}
+When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value, which is the fastest error rate upper bound we can obtain
+from Theorem \ref{thm:phase_transition}. Therefore, for the estimator given by \eqref{eq:hatX}, we have the following
+conclusion:
+\begin{theorem}\label{thm:error_rate}
+When $\sqrt{a} - \sqrt{b} > \sqrt{k}, \gamma > b$, for $n$ sufficiently large, $P_G(\hat{X} \not\in S_k(X)) \leq (k-1+o(1))n^{g(\bar{\beta})}$
+\end{theorem}
+Theorem \ref{thm:error_rate} is slightly stronger than \ref{thm:phase_transition} since the upper bound term
+$n^{g(\bar{\beta})}$ decreases
+faster than $n^{g(\bar{\beta})/2}$. This stronger result is obtained by considering the event when $P_G(G | X) < P_G(G | \sigma)$
+for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up. This is also the proof technique to show exact recovery by maximum likelihood is possible
+when $\sqrt{a} - \sqrt{b} > \sqrt{k}$, used in \cite{abbe2015exact} for $k=2$. For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}$ as long as  
+$\sqrt{a} - \sqrt{b} > \sqrt{k}$ is satisfied.
+
+In \eqref{eq:hatX}, we allow $\bar{\sigma}$ to take values from $W^n$. Since we know the ground truth has equal
+size $|\{v \in [n] : X_v = u\}| = \frac{n}{k}$, another formulation is to restrict the search space to
+$W^*:= \{\sigma \big\vert |\{v \in [n] : \sigma_v = \omega^s\}| = \frac{n}{k}, s=0,1, \dots, k \}$.
+When $\sigma \in W^*$, minimizing $H(\sigma)$ is equivalent to
+\begin{equation}
+\hat{X}' = \min_{\sigma \in W^*} \sum_{\{i,j\} \not\in E(G) } \delta(\sigma_i, \sigma_j)
+\end{equation}
+which is the minimum cut between different detected communities.
+
+When $\hat{X}' \neq X$, there must be errors of pairs instead of single one to satisfy the constraint $\hat{X}' \in W^*$.
+Besides, the estimator of $\hat{X}'$ is parameter-free while $\hat{X}$ may depend on $\gamma$.
+However, the restriction to $W^*$ brings no improvement on the upper bound of error rate, which is summarized in the following theorem:
+\begin{theorem}\label{thm:error_rate_2}
+	When $\sqrt{a} - \sqrt{b} > \sqrt{k}$, for $n$ sufficiently large, $P_G(\hat{X}' \not\in S_k(X)) \leq O(n^{g(\bar{\beta})})$
+\end{theorem}
+ 
 The energy has only one parameter $\gamma$, when it takes different values depending on $a,b$, minimizing the
 energy is equivalent with some popular algorithms in asymptotic case. The following analysis shows
 their relationship intuitively.
@@ -423,6 +465,11 @@ $$
 $$
 where $\gamma \frac{\log n}{n} = \frac{1}{\log(a/b)}(\log (1-\A) - \log (1-\B))$ and $C$ is a constant irrelevant with $\sigma$.
 When $n$ is sufficiently large, we have $\gamma \to \gamma_{ML} := \frac{a-b}{\log(a/b)}$.
+
+
+\begin{theorem}
+	When $\sqrt{a} - \sqrt{b} < \sqrt{k}$ and $\gamma > b$, $P_G(\hat{X} \in S_k(X)) = o(1)$
+\end{theorem}
 
 For maximum modularity, we first consider the modularity of a graph, which is defined by
 \begin{align}\label{eq:Q}
@@ -492,7 +539,11 @@ H(\bar{\sigma}) - H(X)=
 $$
 in which we use $A_{\bar{\sigma}}$ (or $B_{\bar{\sigma}}$) to represent the binomial random variable with parameter $\A$ (or $\B$)
 respectively and $N_{\bar{\sigma}}$ is a deterministic positive number, irrelevant with the graph structure.
-
+\begin{lemma}[Lemma 5 from \cite{sibmmc}]\label{lem:sigmaX}
+	Let $\gamma > b$. When $\dist(\bar{\sigma}, X) \geq \frac{n}{\sqrt{\log n}}$ and $\arg\,\min_{\sigma'\in S_k(X)} \dist(\bar{\sigma}, \sigma') = X$. Show that
+	$P_{\sigma | G}(\sigma = \bar{\sigma} ) > \exp(-Cn) P_{\sigma | G}(\sigma = X)$
+	happens with probability (w.r.t. SSBM) less than $\exp(-\tau(\alpha,\beta) n \log^{1-\delta} n )$ where $C$ is an arbitrary constant, $\tau(\alpha,\beta)$ is a positive number.
+\end{lemma}
 When $r\leq \frac{n}{\sqrt{\log n}}$, we can show that $\dist(\sigma, X) = r$ implies $D(\sigma, X)$ by using the triangle
 inequality of $\dist$. For $f \in S_k \backslash \{ id \}$, we have
 $$
@@ -542,7 +593,7 @@ The conditional expectation can be estimated as follows:
 \end{align*}
 $r+r\beta(b-a)/k = f_{\beta}(\frac{b-a}{k}) < \tilde{g}(\beta)$, therefore,
 $(k-1)^r n^{r+r\beta(b-a)/k}n^{-r \tilde{g}(\beta) /2} \leq n^{r (\tilde{g}(\beta) /2 + \epsilon/2)} $.
-Using Lemma 6 in \cite{sibmmc}, we have
+Using Lemma \ref{lem:enhanced_fb}, we have
 \begin{align*}
 P_G(B_{\bar{\sigma}} -A_{\bar{\sigma}}=t\log n)\exp(\beta_n rt \log n) \leq 
 n^{r(f_{\beta_n}(t)-1 + O(\frac{1}{\sqrt{\log n}}))}
@@ -561,7 +612,7 @@ Combining the above equations, we have
 P_{G}(\Xi_n(r) \geq n^{r \tilde{g}(\beta) /2}) &\leq  n^{r(\tilde{g}(\beta)/2 + \epsilon/2)} O(\log n) (k-1)^r\\
 &\leq n^{r(\tilde{g}(\beta)/2 + \epsilon)}
 \end{align*}
-When $r>\frac{n}{\sqrt{\log n}}$, using Lemma 5 from \cite{sibmmc}, we can choose a sufficiently large constant $C>1$
+When $r>\frac{n}{\sqrt{\log n}}$, using Lemma \ref{lem:sigmaX}, we can choose a sufficiently large constant $C>1$
 such that $k^n\exp(-Cn) < e^{-n}$
 \begin{align*}
 \frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
@@ -569,7 +620,17 @@ such that $k^n\exp(-Cn) < e^{-n}$
 &> \exp(-Cn)
 \end{align*}
 happens with probability less than $e^{-n}$. Therefore, \eqref{eq:psigmaX1} holds.
-
+\begin{lemma}[Lemma 6 in \cite{sibmmc}]\label{lem:enhanced_fb}
+	For $t\in [\frac{1}{k}(b-a), 0]$
+	and $ r \le n/\sqrt{\log n}$
+	\begin{equation} \label{eq:upmpt}
+	\begin{aligned}
+	& P_G(B_{\bar{\sigma}}-A_{\bar{\sigma}}\ge t r \log n)  \\
+	\le & \exp\Big(r\log n
+	\Big(f_{\beta}(t) - \beta t -1	+ O(\frac{1}{\sqrt{\log n}}) \Big)\Big) .
+	\end{aligned}
+	\end{equation}
+\end{lemma}
 \section*{Proof of Proposition \ref{prop:large2}}
 The left hand of \eqref{eq:diff1g} can be rewritten as:
 \begin{equation}\label{eq:knd}
@@ -591,11 +652,14 @@ Using Chebyshev inequality, we have
 \begin{equation*}
 P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq n^{\tilde{g}(2\beta_n) - g(\beta_n)} + C_n n^{g(\beta_n) - 1} \log n
 \end{equation*}
+Since $\tilde{g}(\beta)$ is convex,
+we have $2\tilde{g}(x) < \tilde{g}(0) + \tilde{g}(2x)$. That is $\tilde{g}(2\beta_n) - g(\beta_n) > g(\beta_n) - 1$,
+and $P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq (1+o(1))n^{\tilde{g}(2\beta_n) - g(\beta_n)}$.
 Let $\cG'_n = \cG^{(1)}_n \cap \cG^{(2)}_n$
 \begin{align*}
 P_G(G \in \cG'_n) &= P_G(\cG^{(1)}_n) P_G(G \in \cG_n^{(2)} | G \in \cG_n^{(1)}) \\
-& \geq (1-\Theta(n^{2\epsilon - 1} \log n))(1-n^{g(\bar{\beta})}) \\
-&= 1-(1+o(1))n^{g(\bar{\beta})}
+& \geq (1-n^{\tilde{g}(2\beta_n) - g(\beta_n)})(1-n^{g(\bar{\beta})}) \\
+&= 1-(1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - g(\beta_n)} \}
 \end{align*}
 and for every $G\in\cG'_n$,
 \begin{equation*}
@@ -606,4 +670,17 @@ Therefore, from \eqref{eq:knd} we have
 	\frac{P_{\sigma|G}(\dist(\sigma, X)=1)}
 {P_{\sigma|G}(\sigma=X)} \geq (1+o(1)) n^{g(\beta_n)}
 \end{equation*}
+\section*{Proof of Theorem \ref{thm:error_rate}}
+Let $P_F^{(r)}$ denote the probability when there is $\sigma$ satisfying $\dist(\sigma, X) = r$ and $H(\sigma) < H(X)$.
+
+From \eqref{eq:energy_diff}, when $\sigma$ differs from $X$ only by one coordinate, the probability for $H(\sigma) < H(X)$ is
+bounded by $P_G(A_r^s - A_r^0 > 0) = n^{-\frac{(\sqrt{a}-\sqrt{b})^2}{k}}$. Therefore, $P_F^{(1)}  \leq (k-1)n^{g(\bar{\beta})}$.
+Using Lemma \ref{lem:enhanced_fb}, we can get $P_F^{(r)} \leq (k-1)^r n^{rg(\bar{\beta})}$ for $ r \leq \frac{n}{\sqrt{\log n}}$.
+For $ r \geq \frac{n}{\sqrt{\log n}}$, choosing $C=0$ in Lemma \ref{lem:sigmaX} we can get $\sum_{r\geq \frac{n}{\sqrt{\log n}}}P_F^{(r)} \leq e^{-n}$.
+That is, the dominant term is $\sum_{r\leq \frac{n}{\sqrt{\log n}}}P_F^{(r)}$ since the other part decreases exponentially fast.
+Therefore, the upper bound for error rate is
+\begin{align*}
+P_F = & \sum_{r=1}^n P_F^{(r)} \leq (1+o(1)) \sum_{r=1}^{\infty} (k-1)^r n^{rg(\bar{\beta})}\\
+ \leq & (1+o(1))\frac{(k-1) n^{g(\bar{\beta})}}{1-(k-1) n^{g(\bar{\beta})}} = (k-1+o(1))n^{g(\bar{\beta})}
+\end{align*}
 \end{document}
