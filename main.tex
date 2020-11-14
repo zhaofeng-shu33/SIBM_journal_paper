@@ -21,7 +21,7 @@
 \DeclareMathOperator{\SIBM}{SIBM}
 \DeclareMathOperator{\dist}{dist}
 
-\title{Exact recovery of Stochastic Block Model with Ising sampling}
+\title{Exact recovery of Stochastic Block Model by sampling from Ising model}
 \author{
 	Feng Zhao,~\IEEEmembership{Student Member, IEEE}\\
 	Min Ye,~\IEEEmembership{Member, IEEE} and
@@ -37,11 +37,10 @@
 \begin{document}
 	\maketitle
 \begin{abstract}
-	Based on Ising sampling, we propose a stochastic algorithm to achieve the exact recovery for stochastic block model (SBM).
+	Based on Ising model, we propose a stochastic algorithm to achieve the exact recovery for stochastic block model (SBM).
 	The stochastic algorithm can be transformed to an optimization problem, which includes maximum likelihood and maximal modularity.
-	Besides, we give an unbiased convergent estimator of the parameters of SBM, which can be computed in constant time.
-	Finally, we use metropolis sampling to realize the theoretical Ising sampling and demonstrates the better performance of our method,
-	compared with other theoretically guaranteed algorithm.
+	Besides, we give an unbiased convergent estimator for the parameters of SBM, which can be computed in constant time.
+	Finally, we use metropolis sampling to realize the stochastic algorithm verify the error bound of our algorithm by experiments.
 \end{abstract}
 \begin{IEEEkeywords}
 	stochastic block model, exact recovery, Ising model, modularity maximization, Metropolis sampling
@@ -265,8 +264,7 @@ Let $\beta^*$ be the solution to the equation $g(\beta) = 0$ and $\beta^* < \bar
 how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficiently large, we have
 \begin{enumerate}
 \item If $\gamma > b$ and $\beta > \beta^*$,  $P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
-\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\max\{n^{g(\bar{\beta})},
-n^{\tilde{g}(2\beta)-g(\beta)+\epsilon}, n^{-g(\beta) + \epsilon}\}$;
+\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}\}$;
 \end{enumerate}
 \end{theorem}
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
@@ -425,7 +423,7 @@ If $\gamma > b$ and $\beta < \beta^*$, we have the following proposition:
 \begin{proposition}\label{prop:large2}
 	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG'_n$ such that
 	\begin{equation}
-	P_G(\cG'_n) \geq 1 - (1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - g(\beta_n)} \}
+	P_G(\cG'_n) \geq 1 - (1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}
 	\end{equation}
 	and for every $G \in \cG'_n$,
 	\begin{equation}\label{eq:diff1g}
@@ -447,9 +445,10 @@ We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:ph
 	$$
 	Then
 	\begin{align*}
-	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq P(\cG'^c_n) + \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
-	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - g(\beta_n)} \}\\
-	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta) - g(\beta) + \epsilon}, n^{-g(\beta) + \epsilon}  \}
+	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq P(\cG'^c_n) + \\
+	&\sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
+	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}\\
+	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
 \end{proof}
 \section{Community Detection via energy minimization}
@@ -505,9 +504,6 @@ where $\gamma \frac{\log n}{n} = \frac{1}{\log(a/b)}(\log (1-\A) - \log (1-\B))$
 When $n$ is sufficiently large, we have $\gamma \to \gamma_{ML} := \frac{a-b}{\log(a/b)}$.
 
 
-\begin{theorem}
-	When $\sqrt{a} - \sqrt{b} < \sqrt{k}$ and $\gamma > b$, $P_G(\hat{X} \in S_k(X)) = o(1)$
-\end{theorem}
 
 For maximum modularity, we first consider the modularity of a graph, which is defined by
 \begin{align}\label{eq:Q}
@@ -563,6 +559,19 @@ The computation of $\Delta H(r,s)$ needs $O(\log n)$ time. Generally speaking, w
 the Ising model, it needs to take $N=O(n\log n)$ to generate the sample for good approximation \cite{mcmc}.
 Under such assumption, the time complexity of Algorithm \ref{alg:m} is $n \log^2 n$.
 
+Using Metropolis sampling, we conduct a moderate simulation to verify Theorem \ref{thm:phase_transition}.
+We choose $n=3200, k=2$ and generate the random graph $G$ 1000 times. For each $G$, we further sample $1000n$ states and compute its
+occupation time on the state $\pm X$. The result is shown in the following figure.
+\begin{figure}[!ht]
+	\includegraphics[width=0.45\textwidth]{beta_trans-2020-11-13.eps}
+	\caption{the accuracy of exact recovery by SIBM}
+\end{figure}
+The vertical red line $\beta=0.2$ represents the phase transition threshold. The point $(0.19,0.5)$ in the figure
+can be regarded as the empirical phase transition threshold, whose first coordinate is near to $\beta^* = 0.2$.
+The green line $(\beta, n^{g(\beta)/2})$ is the theoretical lower bound of accuracy for $\beta>0.2$ while the orange line
+$(\beta, n^{-g(\beta)})$ is the theoretical upper bound of accuracy for $\beta < 0.2$. It can be expected that
+as $n$ is larger, the empirical accuracy curve (blue line in the figure) will approach the step function, which jumps from
+0 to 1 at $\beta=0.2$.
 \section{Conclusion}
 \appendix
 \section*{Proof of Theorem \ref{thm:ab12}}
@@ -795,20 +804,21 @@ and
 \end{align}
 where $C_n = be^{2\beta_n}(e^{\beta_n}-1)^2$.
 
-Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n)/2} \}$,
+Since $\tilde{g}(\beta)$ is convex,
+we have $2\tilde{g}(x) < \tilde{g}(0) + \tilde{g}(2x)$. That is $\tilde{g}(2\beta_n) - g(\beta_n) > g(\beta_n) - 1$.
+Therefore, the variance term is actually bounded by $n^{\tilde{g}(2\beta_n)} $.
+
+Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n) - \epsilon / 2} \}$,
 
 Using Chebyshev inequality, we have
 \begin{equation*}
-P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq n^{\tilde{g}(2\beta_n) - g(\beta_n)} + C_n n^{g(\beta_n) - 1} \log n
+P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon}
 \end{equation*}
-Since $\tilde{g}(\beta)$ is convex,
-we have $2\tilde{g}(x) < \tilde{g}(0) + \tilde{g}(2x)$. That is $\tilde{g}(2\beta_n) - g(\beta_n) > g(\beta_n) - 1$,
-and $P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq (1+o(1))n^{\tilde{g}(2\beta_n) - g(\beta_n)}$.
 Let $\cG'_n = \cG^{(1)}_n \cap \cG^{(2)}_n$
 \begin{align*}
 P_G(G \in \cG'_n) &= P_G(\cG^{(1)}_n) P_G(G \in \cG_n^{(2)} | G \in \cG_n^{(1)}) \\
-& \geq (1-n^{\tilde{g}(2\beta_n) - g(\beta_n)})(1-n^{g(\bar{\beta})}) \\
-&= 1-(1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - g(\beta_n)} \}
+& \geq (1-n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon})(1-n^{g(\bar{\beta})}) \\
+&= 1-(1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}
 \end{align*}
 and for every $G\in\cG'_n$,
 \begin{equation*}
