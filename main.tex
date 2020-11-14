@@ -445,8 +445,7 @@ We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:ph
 	$$
 	Then
 	\begin{align*}
-	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq P(\cG'^c_n) + \\
-	&\sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X))\\
+	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq P(\cG'^c_n) + \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X)) \\
 	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}\\
 	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
@@ -684,7 +683,7 @@ Next we show the root lies within $(0, 2e_1)$.
 
 Therefore, we can get a unique solution $y$ within $(0, 2e_1)$. Since $(a,b)$ is a solution for the equation array. The conclusion follows.
 
-By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can show $\mathbb{\hat{a}}[E] = a,
+By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can show $\mathbb{E}[\hat{a}] = a,
 \mathbb{E}[\hat{b}] = b$. By the continuous property of $g(y)$, $\hat{b} \to b$ and $\hat{a} \to a$ follows similarly.
 \end{proof}
 \section*{Proof of Proposition \ref{prop:small}}
