@@ -327,7 +327,7 @@ implies that $P_{\sigma | G}(\sigma = X)$ has the largest probability for almost
 the sample from the Ising model, we can directly maximize the conditional probability to find this state with the largest probability.
 Or equivalently, we can proceed by minimizing the energy term in \eqref{eq:energy}:
 \begin{equation}\label{eq:hatX}
-\hat{X} := \arg\min_{\bar{\sigma} \in W^n} H(\bar{\sigma})
+\hat{X}' := \arg\min_{\bar{\sigma} \in W^n} H(\bar{\sigma})
 \end{equation}
 
 In \eqref{eq:hatX}, we allow $\bar{\sigma}$ to take values from $W^n$. Since we know the ground truth label $X$ has equal
@@ -335,30 +335,30 @@ size $|\{v \in [n] : X_v = u\}| = \frac{n}{k}$, another formulation is to restri
 $W^*:= \{\sigma \big\vert |\{v \in [n] : \sigma_v = \omega^s\}| = \frac{n}{k}, s=0,1, \dots, k \}$.
 When $\sigma \in W^*$, minimizing $H(\sigma)$ is equivalent to
 \begin{equation}
-\hat{X}' = \min_{\sigma \in W^*} \sum_{\{i,j\} \not\in E(G) } \delta(\sigma_i, \sigma_j)
+\hat{X}'' = \min_{\sigma \in W^*} \sum_{\{i,j\} \not\in E(G) } \delta(\sigma_i, \sigma_j)
 \end{equation}
 which is the minimum cut between different detected communities.
 
-When $\hat{X}' \neq X$, we must have $\dist(\hat{X}' ,X)\geq 2$ to satisfy the constraint $\hat{X}' \in W^*$.
-Besides, the estimator of $\hat{X}'$ is parameter-free while $\hat{X}$ depends on $\gamma$. The extra parameter $\gamma$ in the expression of
-$\hat{X}$ can be regarded as a kind of Lagrange multiplier for this integer programming problem. Thus the optimization problem for $\hat{X}$
-is a relaxation of that for $\hat{X}'$ by introducing a penalized term and enlarging the searched space from $W^*$ to $W$.
+When $\hat{X}'' \neq X'$, we must have $\dist(\hat{X}'' ,X)\geq 2$ to satisfy the constraint $\hat{X}'' \in W^*$.
+Besides, the estimator of $\hat{X}''$ is parameter-free while $\hat{X}'$ depends on $\gamma$. The extra parameter $\gamma$ in the expression of
+$\hat{X}'$ can be regarded as a kind of Lagrange multiplier for this integer programming problem. Thus the optimization problem for $\hat{X}'$
+is a relaxation of that for $\hat{X}''$ by introducing a penalized term and enlarging the searched space from $W^*$ to $W$.
 
 When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value, which means $n^{g(\bar{\beta})/2}$ is the fastest error rate upper bound for Ising estimator we can obtain
-from Theorem \ref{thm:phase_transition}. For the estimator $\hat{X}$ and $\hat{X}'$, we can obtain more sharper error upper bound, which is
+from Theorem \ref{thm:phase_transition}. For the estimator $\hat{X}'$ and $\hat{X}''$, we can obtain sharper error upper bound, which is
 summarized in the following theorem:
 \begin{theorem}\label{thm:error_rate}
 When $\sqrt{a} - \sqrt{b} > \sqrt{k}$, for $n$ sufficiently large, 
 \begin{enumerate}
-	\item if $\gamma > b$, $P_G(\hat{X} \not\in S_k(X)) \leq (k-1+o(1))n^{g(\bar{\beta})}$;
-	\item $P_G(\hat{X}' \not\in S_k(X)) \leq ((k-1)^2+o(1))n^{2g(\bar{\beta})}$.
+	\item if $\gamma > b$, $P_G(\hat{X}' \not\in S_k(X)) \leq (k-1+o(1))n^{g(\bar{\beta})}$;
+	\item $P_G(\hat{X}'' \not\in S_k(X)) \leq ((k-1)^2+o(1))n^{2g(\bar{\beta})}$.
 \end{enumerate}
 \end{theorem}
 Theorem \ref{thm:error_rate} is slightly stronger than \ref{thm:phase_transition} since the upper bound term
 $n^{g(\bar{\beta})}$ decreases
 faster than $n^{g(\bar{\beta})/2}$. This stronger result is obtained by considering the event when $P_G(G | X) < P_G(G | \sigma)$
 for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up. This is also the proof technique to show exact recovery by maximum likelihood is possible
-when $\sqrt{a} - \sqrt{b} > \sqrt{k}$, used in \cite{abbe2015exact} for $k=2$. For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}$ as long as  
+when $\sqrt{a} - \sqrt{b} > \sqrt{k}$, used in \cite{abbe2015exact} for $k=2$. For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}'$ as long as  
 $\sqrt{a} - \sqrt{b} > \sqrt{k}$ is satisfied.
 
 
