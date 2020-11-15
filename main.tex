@@ -251,7 +251,7 @@ This is exactly what Stochastic Ising Block Model (SIBM) model says:
 P_{\SIBM}(\sigma = \bar{\sigma}) = \sum_{G \in \cG_n} P_G(G) P_{\sigma | G}(\sigma = \bar{\sigma}) 
 \end{equation}
 \end{definition}
-Definition \ref{def:ising} gives a stochastic algorithm for community detection by generating one sample from Ising model. The exact recovery error probability for such algorithm can be written using the notation of SIBM as $P_{\SIBM}(\sigma \not\in S_k(X))$. We can see from this expression that error probability is determined
+Definition \ref{def:ising} gives a stochastic estimator $\hat{X}^*$ for $X$. $\hat{X}^*$ is one sample generated from Ising model. The exact recovery error probability for such algorithm can be written using the notation of SIBM as $P_{\SIBM}(\sigma \not\in S_k(X))$. We can see from this expression that error probability is determined
 by two parameters $(\gamma, \beta)$. When these parameters take proper value, $P_{\SIBM}(\sigma \not\in S_k(X)) \to 0$ and the exact recovery of SBM is achievable. On the contrary, $P_{\SIBM}(\sigma \not\in S_k(X)) \to 1$ if $(\gamma, \beta)$ takes other values.
 These two cases are summarized in the following theorem:
 \begin{theorem}\label{thm:phase_transition}
@@ -321,171 +321,22 @@ is also $O(\log n)$.
 
 When $H(\bar{\sigma}') < H(\bar{\sigma})$, we can expect $P_{\sigma | G}(\sigma = \bar{\sigma}')$ is far less than 
 $P_{\sigma | G}(\sigma = \bar{\sigma})$. However,
-since $G$ is sampled from SBM, the righthand side of \eqref{eq:Pratio} is a random variable. The stochastic behaviour
-of $ \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) $ plays an important role when establishing Theorem \ref{thm:phase_transition}.
-The case $\gamma > b$ has been analyzed in great detail in \cite{sibmmc}, here we enhance the existing result in the following lemma:
-\begin{lemma}\label{lem:specialCase}
-If $\gamma> b$ and $\beta > \beta^*$, there exists a set $\cG'_n$ such that
-$P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and for every $G\in \cG'_n$
-\begin{equation}
-\frac{P_{\sigma |G } (\sigma = \bar{\sigma}')}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2-1}
-\end{equation}
-where $\dist(\bar{\sigma}',X)=1$.
-\end{lemma}
-\begin{proof}
-	From \eqref{eq:Pratio}, we only need to show that
-	\begin{equation}\label{eq:beta_HP}
-	P_G( \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) \geq n^{\tilde{g}(\beta)/2-1}) \leq (1+o(1))n^{\tilde{g}(\beta)/2}
-	\end{equation}
-	Taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
-	\begin{equation}\label{eq:energy_diff}
-	H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_r - A^s_r) + \gamma\frac{\log n}{n}
-	\end{equation}
-	where $A_r^0 \sim Binom(\frac{n}{k}-1, \A)$ and $A^s_r \sim Binom(\frac{n}{k}, \B)$.
-	Therefore, \eqref{eq:beta_HP} is equivalent with
-	\begin{equation}\label{eq:pgAs}
-	P_G\big(A^s_r - A_r^0 \geq t\log n\big)
-	\leq (1+o(1))n^{\tilde{g}(\beta)/2}
-	\end{equation}
-	where $t=(1+o(1))\frac{1}{\beta}(\frac{\tilde{g}(\beta)}{2} -1)>\beta\frac{b-a}{k}+1$ and the $o(1)$ term is not random.
-	\eqref{eq:pgAs} follows directly from Lemma \ref{lem:fb}.
-\begin{lemma}[Lemma 1 of \cite{sibmmc}]\label{lem:fb}
-	For $t\in [\frac{1}{k}(b-a), 0]$,
-	define a function
-	\begin{align}
-	&f_{\beta}(t):=\frac{1}{k}\sqrt{k^2t^2+4ab} -\frac{a+b}{k} +1 +\beta t  \notag\\
-	&-t\big(\log(\sqrt{k^2t^2+4ab}+kt)-\log(2b) \big). \label{eq:fbetat}
-	\end{align}
-	It follows that
-	\begin{align} 
-	& P_G(A^1_r-A^0_r\ge t\log n)  \notag\\
-	\le &  \exp\Big(\log n \Big(f_{\beta}(t) -\beta t  - 1 + O\big(\frac{\log n}{n}\big) \Big)\Big) .
-	\end{align}
-	In particular, $P_G(A^1_r-A^0_r\ge 0 ) \leq n^{-\frac{(\sqrt{a}-\sqrt{b})^2}{k}} $.
-\end{lemma}	
-\end{proof}
+since $G$ is sampled from SBM, the righthand side of \eqref{eq:Pratio} is a random variable. The proof of
+Theorem \ref{thm:phase_transition} lies at the detailed analysis of the probabilistic property
+of $ \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) $ and can be found in the Appendix.
 
-Since 
-$\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} = \sum_{s=1}^{k-1}
-\sum_{r=1}^n \frac{P_{\sigma |G } (\sigma = \bar{\sigma}'(s,r))}{P_{\sigma |G } (\sigma = X)}$ 
-where $\bar{\sigma}'(s,r)$ only differs from $X$ by $\bar{\sigma}'_r = \omega^s \cdot X_r$.
-In such a case, we can show that there exists a set $\cG'_n$
-$P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and 
-$\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2}$.
-Or more generally, we have the following proposition
-\begin{proposition}\label{prop:small}
-If $\gamma>b$, $\beta>\beta^\ast$,
-For $1\leq r \leq \frac{n}{\sqrt{\log n}}$
-and $\forall \epsilon > 0$, there is a set $\cG^{(r)}$ such that
-\begin{equation}\label{eq:Gr}
-P_G(\cG^{(r)}_n) \ge 1 - n^{r(\tilde{g}(\beta)/2 + \epsilon)}
-\end{equation}
-and
-for every $G\in\cG^{(r)}_n$,
-\begin{equation}\label{eq:psigmaX}
-\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
-{P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
-n^{r \tilde{g}(\beta) /2}
-\end{equation}
-For $r> \frac{n}{\sqrt{\log n}}$, there is a set $\cG^{(r)}$ such that
-\begin{equation}\label{eq:Gr1}
-P(G\in\cG^{(r)}_n) \ge 1 - e^{-n}
-\end{equation}
-and
-for every $G\in\cG^{(r)}_n$,
-\begin{equation}\label{eq:psigmaX1}
-\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
-{P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
-e^{-n}
-\end{equation}
-\end{proposition}
-We may tend to use Lemma \ref{lem:specialCase} to establish Proposition \ref{prop:small}. However, the set $\cG_n'$ may depend
-on $(i,r)$ and it is not a good idea to use union bound to get the proper set. The rigorous proof relies on
-proper choice of $\cG_n^{(r)}$
-and is given in
-the appendix.
 
-Now we use Proposition \ref{prop:small} to show 1) of Theorem \ref{thm:phase_transition}.
-\begin{proof}[Proof of Theorem \ref{thm:phase_transition}]
-Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
-we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq k n^{\tilde{g}(\beta)/2 + \epsilon}$.
-Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, choose $\frac{\epsilon}{2}$, from \eqref{eq:Gr} we have
-\begin{align*}
-P_G(\cG'^c_n) &= P_G(\cup_{r=1}^n (\cG_n^{(r)})^c) \\
-&\leq \sum_{r=1}^{n/\sqrt{\log n } } n^{r(\tilde{g}(\beta)/2 + \epsilon/2)}  + n e^{-n} \\
-& \leq \frac{1}{2} n^{\tilde{g}(\beta)/2 + \epsilon}
-\end{align*}
-where the last equality follows from the estimation of sum of geometric series.
-On the other hand, for every $G \in \cG'_n$, from \eqref{eq:psigmaX}
-we have
-\begin{align*}
-\frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{1-P_{\sigma | G}(\sigma \neq X | D(\sigma, X))} &= \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \\
-&< \sum_{r=1}^{n/\sqrt{\log n }}  n^{r\tilde{g}(\beta)/2} + n e^{-n}
-\end{align*}
-from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq \frac{1}{2}n^{\tilde{g}(\beta)/2 + \epsilon}$.
-Finally, 
-\begin{align*}
-P_{\SIBM}(\sigma \neq X|D(\sigma, X)) &= \sum_{G\in \cG'_n} P_G(G)P_{\sigma |G}(\sigma \neq X | D(\sigma, X)) \\
-+ P_G(\cG'^c_n)
-& \leq n^{\tilde{g}(\beta)/2 + \epsilon}
-\end{align*}
-
-\end{proof}
-If $\gamma > b$ and $\beta < \beta^*$, we have the following proposition:
-\begin{proposition}\label{prop:large2}
-	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG'_n$ such that
-	\begin{equation}
-	P_G(\cG'_n) \geq 1 - (1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}
-	\end{equation}
-	and for every $G \in \cG'_n$,
-	\begin{equation}\label{eq:diff1g}
-	\frac{P_{\sigma|G}(\dist(\sigma, X)=1 | D(\sigma, X))}
-	{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \geq (1+o(1))n^{g(\beta_n)}
-	\end{equation}
-	where $\beta_n = \beta(1+\gamma\frac{\log n}{n})$.
-\end{proposition}
-We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:phase_transition}.
-\begin{proof}
-	Using Proposition \ref{prop:large2}, for every $G \in \cG'_n$
-	we can get
-	$$
-	\frac{1-P_{\sigma | G}(\sigma=X | D(\sigma, X))}{P_{\sigma | G}(\sigma=X | D(\sigma, X))}\geq (1+o(1))n^{g(\beta_n)}
-	$$
-	We then have
-	$$
-	P_{\sigma | G}(\sigma=X| D(\sigma, X)) \leq (1+o(1)) n^{-g(\beta_n)}
-	$$
-	Then
-	\begin{align*}
-	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq  P(\cG'^c_n) \\
-	&+ \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X)) \\
-	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}\\
-	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}  \}
-	\end{align*}
-\end{proof}
 \section{Community Detection via Energy Minimization}\label{sec:em}
 Since $\beta^*$ is irrelevant with $n$, when $\gamma>b$, we can choose a sufficiently large $\beta$ such that
-$\beta > \beta^*$, then by Theorem \ref{thm:phase_transition}, with almost 1 probability, $\sigma \in S_k(X)$, which
-implies that $P_{\sigma | G}(\sigma = X)$ has largest probability for almost all graph $G$. Instead of generating
-the sample from the Ising model, we can directly maximize the conditional probability to find the most favorable
-configuration. Or equivalently, by minimizing the energy term in \eqref{eq:energy}:
+$\beta > \beta^*$, then by Theorem \ref{thm:phase_transition}, with almost 1 probability $\sigma \in S_k(X)$, which
+implies that $P_{\sigma | G}(\sigma = X)$ has the largest probability for almost all graph $G$. Instead of generating
+the sample from the Ising model, we can directly maximize the conditional probability to find this state with the largest probability.
+Or equivalently, we can proceed by minimizing the energy term in \eqref{eq:energy}:
 \begin{equation}\label{eq:hatX}
 \hat{X} := \arg\min_{\bar{\sigma} \in W^n} H(\bar{\sigma})
 \end{equation}
-When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value, which is the fastest error rate upper bound we can obtain
-from Theorem \ref{thm:phase_transition}. Therefore, for the estimator given by \eqref{eq:hatX}, we have the following
-conclusion:
-\begin{theorem}\label{thm:error_rate}
-When $\sqrt{a} - \sqrt{b} > \sqrt{k}, \gamma > b$, for $n$ sufficiently large, $P_G(\hat{X} \not\in S_k(X)) \leq (k-1+o(1))n^{g(\bar{\beta})}$
-\end{theorem}
-Theorem \ref{thm:error_rate} is slightly stronger than \ref{thm:phase_transition} since the upper bound term
-$n^{g(\bar{\beta})}$ decreases
-faster than $n^{g(\bar{\beta})/2}$. This stronger result is obtained by considering the event when $P_G(G | X) < P_G(G | \sigma)$
-for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up. This is also the proof technique to show exact recovery by maximum likelihood is possible
-when $\sqrt{a} - \sqrt{b} > \sqrt{k}$, used in \cite{abbe2015exact} for $k=2$. For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}$ as long as  
-$\sqrt{a} - \sqrt{b} > \sqrt{k}$ is satisfied.
 
-In \eqref{eq:hatX}, we allow $\bar{\sigma}$ to take values from $W^n$. Since we know the ground truth has equal
+In \eqref{eq:hatX}, we allow $\bar{\sigma}$ to take values from $W^n$. Since we know the ground truth label $X$ has equal
 size $|\{v \in [n] : X_v = u\}| = \frac{n}{k}$, another formulation is to restrict the search space to
 $W^*:= \{\sigma \big\vert |\{v \in [n] : \sigma_v = \omega^s\}| = \frac{n}{k}, s=0,1, \dots, k \}$.
 When $\sigma \in W^*$, minimizing $H(\sigma)$ is equivalent to
@@ -494,16 +345,29 @@ When $\sigma \in W^*$, minimizing $H(\sigma)$ is equivalent to
 \end{equation}
 which is the minimum cut between different detected communities.
 
-When $\hat{X}' \neq X$, there must be errors of pairs instead of single one to satisfy the constraint $\hat{X}' \in W^*$.
-Besides, the estimator of $\hat{X}'$ is parameter-free while $\hat{X}$ may depend on $\gamma$. The extra parameter $\gamma$ in the expression of
+When $\hat{X}' \neq X$, we must have $\dist(\hat{X}' ,X)\geq 2$ to satisfy the constraint $\hat{X}' \in W^*$.
+Besides, the estimator of $\hat{X}'$ is parameter-free while $\hat{X}$ depends on $\gamma$. The extra parameter $\gamma$ in the expression of
 $\hat{X}$ can be regarded as a kind of Lagrange multiplier for this integer programming problem. Thus the optimization problem for $\hat{X}$
 is a relaxation of that for $\hat{X}'$ by introducing a penalized term and enlarging the searched space from $W^*$ to $W$.
 
-The following theorem shows that we can obtain a sharper upper bound for $\hat{X}'$ than that of $\hat{X}$:
-\begin{theorem}\label{thm:error_rate_2}
-	When $\sqrt{a} - \sqrt{b} > \sqrt{k}$, for $n$ sufficiently large, $P_G(\hat{X}' \not\in S_k(X)) \leq ((k-1)^2+o(1))n^{2g(\bar{\beta})}$
+When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value, which means $n^{g(\bar{\beta})/2}$ is the fastest error rate upper bound for Ising estimator we can obtain
+from Theorem \ref{thm:phase_transition}. For the estimator $\hat{X}$ and $\hat{X}'$, we can obtain more sharper error upper bound, which is
+summarized in the following theorem:
+\begin{theorem}\label{thm:error_rate}
+When $\sqrt{a} - \sqrt{b} > \sqrt{k}$, for $n$ sufficiently large, 
+\begin{enumerate}
+	\item if $\gamma > b$, $P_G(\hat{X} \not\in S_k(X)) \leq (k-1+o(1))n^{g(\bar{\beta})}$;
+	\item $P_G(\hat{X}' \not\in S_k(X)) \leq ((k-1)^2+o(1))n^{2g(\bar{\beta})}$.
+\end{enumerate}
 \end{theorem}
- 
+Theorem \ref{thm:error_rate} is slightly stronger than \ref{thm:phase_transition} since the upper bound term
+$n^{g(\bar{\beta})}$ decreases
+faster than $n^{g(\bar{\beta})/2}$. This stronger result is obtained by considering the event when $P_G(G | X) < P_G(G | \sigma)$
+for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up. This is also the proof technique to show exact recovery by maximum likelihood is possible
+when $\sqrt{a} - \sqrt{b} > \sqrt{k}$, used in \cite{abbe2015exact} for $k=2$. For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}$ as long as  
+$\sqrt{a} - \sqrt{b} > \sqrt{k}$ is satisfied.
+
+
 The energy has only one parameter $\gamma$, when it takes different values depending on $a,b$, minimizing the
 energy is equivalent with some popular algorithms in asymptotic case. The following analysis shows
 their relationship intuitively.
@@ -530,7 +394,7 @@ Q(\sigma) = &-\sum_{\{i,j\} \not\in E(G) } \frac{d_i d_j}{2 |E|}\delta(\sigma_i,
 From \eqref{eq:Qtransform}, we can show that $Q(\sigma) \to -H(\sigma)$ with $\gamma = \gamma_{MQ} = \frac{a+b}{2}$ as $n\to \infty$.
 Indeed, we have $d_i \sim \frac{\log n(a+b)}{2}, |E| \sim \frac{1}{2}n d_i$. Therefore, we have $\frac{d_id_j}{2|E|} \to \gamma_{MQ} \frac{\log n}{n} $.
 
-Using $a>b$ and $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions.
+Using $a>b$ and the inequality $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions.
 
 
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
@@ -699,7 +563,7 @@ Therefore, we can get a unique solution $y$ within $(0, 2e_1)$. Since $(a,b)$ is
 By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can show $\mathbb{E}[\hat{a}] = a,
 \mathbb{E}[\hat{b}] = b$. By the continuous property of $g(y)$, $\hat{b} \to b$ and $\hat{a} \to a$ follows similarly.
 \end{proof}
-\section*{Proof of Proposition \ref{prop:small}}
+\section*{Proof of Theorem \ref{thm:phase_transition}}
 \begin{proof}[Proof of Lemma \ref{lem:lemmaDiff}]
 	First we rewrite the energy term in \eqref{eq:energy} as:
 	\begin{equation*}
@@ -719,6 +583,137 @@ By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can sho
 	\delta( \bar{\sigma}_r, \bar{\sigma}_i) +1) \\
 	&= (1+\gamma \frac{\log n}{n})\sum_{i \in N_r(G)} J_s(\bar{\sigma}_r, \bar{\sigma}_i)\\
 	&+ \gamma \frac{\log n}{n} (m(\omega^s \cdot \bar{\sigma}_r)-m(\bar{\sigma}_r)+1)
+	\end{align*}
+\end{proof}
+\begin{lemma}\label{lem:specialCase}
+	If $\gamma> b$ and $\beta > \beta^*$, there exists a set $\cG'_n$ such that
+	$P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and for every $G\in \cG'_n$
+	\begin{equation}
+	\frac{P_{\sigma |G } (\sigma = \bar{\sigma}')}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2-1}
+	\end{equation}
+	where $\dist(\bar{\sigma}',X)=1$.
+\end{lemma}
+\begin{proof}
+	From \eqref{eq:Pratio}, we only need to show that
+	\begin{equation}\label{eq:beta_HP}
+	P_G( \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) \geq n^{\tilde{g}(\beta)/2-1}) \leq (1+o(1))n^{\tilde{g}(\beta)/2}
+	\end{equation}
+	Taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
+	\begin{equation}\label{eq:energy_diff}
+	H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_r - A^s_r) + \gamma\frac{\log n}{n}
+	\end{equation}
+	where $A_r^0 \sim Binom(\frac{n}{k}-1, \A)$ and $A^s_r \sim Binom(\frac{n}{k}, \B)$.
+	Therefore, \eqref{eq:beta_HP} is equivalent with
+	\begin{equation}\label{eq:pgAs}
+	P_G\big(A^s_r - A_r^0 \geq t\log n\big)
+	\leq (1+o(1))n^{\tilde{g}(\beta)/2}
+	\end{equation}
+	where $t=(1+o(1))\frac{1}{\beta}(\frac{\tilde{g}(\beta)}{2} -1)>\beta\frac{b-a}{k}+1$ and the $o(1)$ term is not random.
+	\eqref{eq:pgAs} follows directly from Lemma \ref{lem:fb}.
+	\begin{lemma}\label{lem:fb}
+		For $t\in [\frac{1}{k}(b-a), 0]$,
+		define a function
+		\begin{align}
+		&f_{\beta}(t):=\frac{1}{k}\sqrt{k^2t^2+4ab} -\frac{a+b}{k} +1 +\beta t  \notag\\
+		&-t\big(\log(\sqrt{k^2t^2+4ab}+kt)-\log(2b) \big). \label{eq:fbetat}
+		\end{align}
+		It follows that
+		\begin{align} 
+		& P_G(A^1_r-A^0_r\ge t\log n)  \notag\\
+		\le &  \exp\Big(\log n \Big(f_{\beta}(t) -\beta t  - 1 + O\big(\frac{\log n}{n}\big) \Big)\Big) .
+		\end{align}
+		In particular, $P_G(A^1_r-A^0_r\ge 0 ) \leq n^{-\frac{(\sqrt{a}-\sqrt{b})^2}{k}} $.
+	\end{lemma}	
+\end{proof}
+
+Since 
+$\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} = \sum_{s=1}^{k-1}
+\sum_{r=1}^n \frac{P_{\sigma |G } (\sigma = \bar{\sigma}'(s,r))}{P_{\sigma |G } (\sigma = X)}$ 
+where $\bar{\sigma}'(s,r)$ only differs from $X$ by $\bar{\sigma}'_r = \omega^s \cdot X_r$.
+In such a case, we can show that there exists a set $\cG'_n$
+$P_G(\cG'_n) \geq 1 - (1+o(1))n^{\tilde{g}(\beta)/2}$ and 
+$\frac{P_{\sigma |G } (\dist(\sigma, X)=1)}{P_{\sigma |G } (\sigma = X)} \leq n^{\tilde{g}(\beta)/2}$.
+Or more generally, we have the following proposition
+\begin{lemma}\label{prop:small}
+	If $\gamma>b$, $\beta>\beta^\ast$,
+	For $1\leq r \leq \frac{n}{\sqrt{\log n}}$
+	and $\forall \epsilon > 0$, there is a set $\cG^{(r)}$ such that
+	\begin{equation}\label{eq:Gr}
+	P_G(\cG^{(r)}_n) \ge 1 - n^{r(\tilde{g}(\beta)/2 + \epsilon)}
+	\end{equation}
+	and
+	for every $G\in\cG^{(r)}_n$,
+	\begin{equation}\label{eq:psigmaX}
+	\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
+	{P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
+	n^{r \tilde{g}(\beta) /2}
+	\end{equation}
+	For $r> \frac{n}{\sqrt{\log n}}$, there is a set $\cG^{(r)}$ such that
+	\begin{equation}\label{eq:Gr1}
+	P(G\in\cG^{(r)}_n) \ge 1 - e^{-n}
+	\end{equation}
+	and
+	for every $G\in\cG^{(r)}_n$,
+	\begin{equation}\label{eq:psigmaX1}
+	\frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
+	{P_{\sigma|G}(\sigma=X | D(\sigma, X))} <
+	e^{-n}
+	\end{equation}
+\end{lemma}
+
+
+If $\gamma > b$ and $\beta < \beta^*$, we have the following lemma:
+\begin{lemma}\label{prop:large2}
+	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG'_n$ such that
+	\begin{equation}
+	P_G(\cG'_n) \geq 1 - (1+o(1))\max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}
+	\end{equation}
+	and for every $G \in \cG'_n$,
+	\begin{equation}\label{eq:diff1g}
+	\frac{P_{\sigma|G}(\dist(\sigma, X)=1 | D(\sigma, X))}
+	{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \geq (1+o(1))n^{g(\beta_n)}
+	\end{equation}
+	where $\beta_n = \beta(1+\gamma\frac{\log n}{n})$.
+\end{lemma}
+\begin{proof}[Proof of Theorem \ref{thm:phase_transition}]
+	Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
+	we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq k n^{\tilde{g}(\beta)/2 + \epsilon}$.
+	Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, choose $\frac{\epsilon}{2}$, from \eqref{eq:Gr} we have
+	\begin{align*}
+	P_G(\cG'^c_n) &= P_G(\cup_{r=1}^n (\cG_n^{(r)})^c) \\
+	&\leq \sum_{r=1}^{n/\sqrt{\log n } } n^{r(\tilde{g}(\beta)/2 + \epsilon/2)}  + n e^{-n} \\
+	& \leq \frac{1}{2} n^{\tilde{g}(\beta)/2 + \epsilon}
+	\end{align*}
+	where the last equality follows from the estimation of sum of geometric series.
+	On the other hand, for every $G \in \cG'_n$, from \eqref{eq:psigmaX}
+	we have
+	\begin{align*}
+	\frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{1-P_{\sigma | G}(\sigma \neq X | D(\sigma, X))} &= \frac{P_{\sigma | G}(\sigma \neq X | D(\sigma, X))}{P_{\sigma|G}(\sigma=X | D(\sigma, X))} \\
+	&< \sum_{r=1}^{n/\sqrt{\log n }}  n^{r\tilde{g}(\beta)/2} + n e^{-n}
+	\end{align*}
+	from which we can get the estimation $P_{\sigma | G}(\sigma \neq X | D(\sigma, X))\leq \frac{1}{2}n^{\tilde{g}(\beta)/2 + \epsilon}$.
+	Finally, 
+	\begin{align*}
+	P_{\SIBM}(\sigma \neq X|D(\sigma, X)) &= \sum_{G\in \cG'_n} P_G(G)P_{\sigma |G}(\sigma \neq X | D(\sigma, X)) \\
+	+ P_G(\cG'^c_n)
+	& \leq n^{\tilde{g}(\beta)/2 + \epsilon}
+	\end{align*}
+	
+	Using Proposition \ref{prop:large2}, for every $G \in \cG'_n$
+	we can get
+	$$
+	\frac{1-P_{\sigma | G}(\sigma=X | D(\sigma, X))}{P_{\sigma | G}(\sigma=X | D(\sigma, X))}\geq (1+o(1))n^{g(\beta_n)}
+	$$
+	We then have
+	$$
+	P_{\sigma | G}(\sigma=X| D(\sigma, X)) \leq (1+o(1)) n^{-g(\beta_n)}
+	$$
+	Then
+	\begin{align*}
+	&P_{\SIBM}(\sigma=X| D(\sigma, X))  \leq  P(\cG'^c_n) \\
+	&+ \sum_{G\in \cG'_n}P_G(G) P_{\sigma|G}(\sigma=X| D(\sigma, X)) \\
+	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}\\
+	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
 \end{proof}
 We distinguish the discussion between two cases: $r\leq \frac{n}{\sqrt{\log n}}$
@@ -811,7 +806,7 @@ such that $k^n\exp(-Cn) < e^{-n}$
 &> \exp(-Cn)
 \end{align*}
 happens with probability less than $e^{-n}$. Therefore, \eqref{eq:psigmaX1} holds.
-\begin{lemma}[Lemma 6 in \cite{sibmmc}]\label{lem:enhanced_fb}
+\begin{lemma}\label{lem:enhanced_fb}
 	For $t\in [\frac{1}{k}(b-a), 0]$
 	and $ r \le n/\sqrt{\log n}$
 	\begin{equation} \label{eq:upmpt}
@@ -822,7 +817,6 @@ happens with probability less than $e^{-n}$. Therefore, \eqref{eq:psigmaX1} hold
 	\end{aligned}
 	\end{equation}
 \end{lemma}
-\section*{Proof of Proposition \ref{prop:large2}}
 The left hand of \eqref{eq:diff1g} can be rewritten as:
 \begin{equation}\label{eq:knd}
 	\frac{P_{\sigma|G}(\dist(\sigma, X)=1)}
@@ -843,7 +837,7 @@ Therefore, the variance term is actually bounded by $n^{\tilde{g}(2\beta_n)} $.
 
 Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n) - \epsilon / 2} \}$,
 
-Using Chebyshev inequality, we have
+Using Chebyshev's inequality, we have
 \begin{equation*}
 P_G(G \not\in \cG^{(2)}_n \Big\vert  G \in \cG^{(1)}_n) \leq n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon}
 \end{equation*}
