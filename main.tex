@@ -306,11 +306,11 @@ careful analysis on the one-flip energy difference. This useful result is summar
 	\begin{align}
 	H(\bar{\sigma}') - H(\bar{\sigma}) &= (1+\gamma \frac{\log n}{n})\sum_{i \in N_r(G)} J_s(\bar{\sigma}_r, \bar{\sigma}_i)
 	\notag \\
-	&- \gamma \frac{\log n}{n} (m(\bar{\sigma}_r)-m(\omega^s \cdot \bar{\sigma}_r)-1) \label{eq:DeltaH}
+	&+ \gamma \frac{\log n}{n} (m(\omega^s \cdot \bar{\sigma}_r)-m(\bar{\sigma}_r)+1) \label{eq:DeltaH}
 	\end{align}
 	where $m(\omega^j) := |\{i \in [n] | \bar{\sigma}_i = \omega^j | \}$ and $J_s(x, y) = \delta(x, y) - \delta(\omega_s \cdot x, y)$
 \end{lemma}
-Lemma \ref{lem:lemmaDiff} gives an explicit way to compare the probability of two configurations by the following
+Lemma \ref{lem:lemmaDiff} gives an explicit way to compare the probability of two states by the following
 equality:
 \begin{equation}\label{eq:Pratio}
 \frac{P_{\sigma |G } (\sigma = \bar{\sigma}')}{P_{\sigma |G } (\sigma = \bar{\sigma})}
@@ -463,7 +463,7 @@ We will use Proposition \ref{prop:large2} to establish 2) of Theorem \ref{thm:ph
 	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
 \end{proof}
-\section{Community Detection via Energy Minimization}\ref{sec:em}
+\section{Community Detection via Energy Minimization}\label{sec:em}
 Since $\beta^*$ is irrelevant with $n$, when $\gamma>b$, we can choose a sufficiently large $\beta$ such that
 $\beta > \beta^*$, then by Theorem \ref{thm:phase_transition}, with almost 1 probability, $\sigma \in S_k(X)$, which
 implies that $P_{\sigma | G}(\sigma = X)$ has largest probability for almost all graph $G$. Instead of generating
@@ -700,6 +700,27 @@ By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can sho
 \mathbb{E}[\hat{b}] = b$. By the continuous property of $g(y)$, $\hat{b} \to b$ and $\hat{a} \to a$ follows similarly.
 \end{proof}
 \section*{Proof of Proposition \ref{prop:small}}
+\begin{proof}[Proof of Lemma \ref{lem:lemmaDiff}]
+	First we rewrite the energy term in \eqref{eq:energy} as:
+	\begin{equation*}
+	H(\bar{\sigma}) = \gamma \frac{\log n}{n} \sum_{i < j} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
+	- (1 + \gamma\frac{\log n}{n}) \sum_{ \{i, j\} \in E(G)} \delta(\bar{\sigma}_i, \bar{\sigma}_j)
+	\end{equation*}
+	Then calculating the energy difference term by:
+	\begin{align*}
+	H(\bar{\sigma}') - H(\bar{\sigma}) &= (1 + \gamma\frac{\log n}{n})\sum_{i \in N_r(G)} (\delta(\bar{\sigma}_r, \bar{\sigma}_i) -
+	\delta(\omega^s \cdot \bar{\sigma}_r, \bar{\sigma}_i)) \\
+	&+ \gamma \frac{\log n}{n}\sum_{i\neq r}
+	( \delta(\omega^s \cdot \bar{\sigma}_r, \bar{\sigma}_i) -
+	\delta( \bar{\sigma}_r, \bar{\sigma}_i) ) \\
+	& = (1 + \gamma\frac{\log n}{n})\sum_{i \in N_r(G)} J_s(\bar{\sigma}_r, \bar{\sigma}_i) \\
+	&+ \gamma \frac{\log n}{n}\sum_{i=1}^n
+	( \delta(\omega^s \cdot \bar{\sigma}_r, \bar{\sigma}_i) -
+	\delta( \bar{\sigma}_r, \bar{\sigma}_i) +1) \\
+	&= (1+\gamma \frac{\log n}{n})\sum_{i \in N_r(G)} J_s(\bar{\sigma}_r, \bar{\sigma}_i)\\
+	&+ \gamma \frac{\log n}{n} (m(\omega^s \cdot \bar{\sigma}_r)-m(\bar{\sigma}_r)+1)
+	\end{align*}
+\end{proof}
 We distinguish the discussion between two cases: $r\leq \frac{n}{\sqrt{\log n}}$
 and $r > \frac{n}{\sqrt{\log n}}$. Some additional notation is needed for the proof.
 Similar with \eqref{eq:energy_diff}, generally we can write
