@@ -344,8 +344,8 @@ Besides, the estimator of $\hat{X}''$ is parameter-free while $\hat{X}'$ depends
 $\hat{X}'$ can be regarded as a kind of Lagrange multiplier for this integer programming problem. Thus the optimization problem for $\hat{X}'$
 is a relaxation of that for $\hat{X}''$ by introducing a penalized term and enlarging the searched space from $W^*$ to $W$.
 
-When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value, which means $n^{g(\bar{\beta})/2}$ is the fastest error rate upper bound for Ising estimator we can obtain
-from Theorem \ref{thm:phase_transition}. For the estimator $\hat{X}'$ and $\hat{X}''$, we can obtain sharper error upper bound, which is
+When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value. Therefore, from Theorem \ref{thm:phase_transition} we can get that $n^{g(\bar{\beta})/2}$ is the fastest error rate upper bound for Ising estimator $\hat{X}^*$.
+For the estimator $\hat{X}'$ and $\hat{X}''$, we can obtain sharper error upper bound, which is
 summarized in the following theorem:
 \begin{theorem}\label{thm:error_rate}
 When $\sqrt{a} - \sqrt{b} > \sqrt{k}$, for $n$ sufficiently large, 
@@ -354,28 +354,32 @@ When $\sqrt{a} - \sqrt{b} > \sqrt{k}$, for $n$ sufficiently large,
 	\item $P_G(\hat{X}'' \not\in S_k(X)) \leq ((k-1)^2+o(1))n^{2g(\bar{\beta})}$.
 \end{enumerate}
 \end{theorem}
-Theorem \ref{thm:error_rate} is slightly stronger than \ref{thm:phase_transition} since the upper bound term
-$n^{g(\bar{\beta})}$ decreases
-faster than $n^{g(\bar{\beta})/2}$. This stronger result is obtained by considering the event when $P_G(G | X) < P_G(G | \sigma)$
-for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up. This is also the proof technique to show exact recovery by maximum likelihood is possible
-when $\sqrt{a} - \sqrt{b} > \sqrt{k}$, used in \cite{abbe2015exact} for $k=2$. For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}'$ as long as  
+As $g(\bar{\beta})<0$, $n^{2g(\bar{\beta})} < n^{g(\bar{\beta})} < n^{g(\bar{\beta})/2}$, then
+Theorem \ref{thm:error_rate} implies that $P_e(\hat{X}'')$ has the sharpest upper bound among the three estimators.
+This can be intuitively understood as the result of smaller search space.
+The proof technique of Theorem \ref{thm:error_rate} is to consider the probability of events when $P_G(G | X) < P_G(G | \sigma)$
+for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up.
+This technique has been used in \cite{abbe2015exact} for $k=2$ to show exact recovery by maximum likelihood is possible
+when $\sqrt{a} - \sqrt{b} > 2$ while a loose bound $n^{g(\bar{\beta})/4}$ is obtained.
+For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}'$ as long as  
 $\sqrt{a} - \sqrt{b} > \sqrt{k}$ is satisfied.
 
 
-The energy has only one parameter $\gamma$, when it takes different values depending on $a,b$, minimizing the
-energy is equivalent with some popular algorithms in asymptotic case. The following analysis shows
-their relationship intuitively.
+Estimator $\hat{X}'$ has one parameter $\gamma$. When $\gamma$ takes different values depending on $a,b$, $\hat{X}'$
+is equivalent with maximum likelihood or maximum modularity in asymptotic case. The following analysis shows
+such relationship intuitively.
 
-For maximum likelihood, from \eqref{eq:GmL} we can write
+Maximum likelihood estimator is obtained by maximizing the log likelihood function.
+From \eqref{eq:GmL}, this function can be written as
 $$
 \log P_G(Z|X=\sigma) = -\log\frac{a}{b} \cdot H(\sigma) + C
 $$
 where $\gamma \frac{\log n}{n} = \frac{1}{\log(a/b)}(\log (1-\A) - \log (1-\B))$ and $C$ is a constant irrelevant with $\sigma$.
 When $n$ is sufficiently large, we have $\gamma \to \gamma_{ML} := \frac{a-b}{\log(a/b)}$.
+That is, maximum likelihood estimator is equivalent with $\hat{X}'$ when $\gamma = \gamma_{ML}$ asymptotically.
 
 
-
-For maximum modularity, we first consider the modularity of a graph, which is defined by
+Maximum modularity estimator is obtained by maximizing the modularity of a graph, which is defined by
 \begin{align}\label{eq:Q}
 Q &= \frac{1}{2 |E|} \sum_{ij} (A_{ij} - \frac{d_i d_j}{2 |E|}) \delta(C_i, C_j)
 \end{align}
@@ -386,9 +390,10 @@ Q(\sigma) = &-\sum_{\{i,j\} \not\in E(G) } \frac{d_i d_j}{2 |E|}\delta(\sigma_i,
 &+ \sum_{\{i,j\} \in E(G) } (1 - \frac{d_i d_j}{2 |E|}) \delta(\sigma_i,\sigma_j)  \label{eq:Qtransform}
 \end{align}
 From \eqref{eq:Qtransform}, we can show that $Q(\sigma) \to -H(\sigma)$ with $\gamma = \gamma_{MQ} = \frac{a+b}{2}$ as $n\to \infty$.
-Indeed, we have $d_i \sim \frac{\log n(a+b)}{2}, |E| \sim \frac{1}{2}n d_i$. Therefore, we have $\frac{d_id_j}{2|E|} \to \gamma_{MQ} \frac{\log n}{n} $.
+Indeed, we have $d_i \sim \frac{\log n(a+b)}{2}, |E| \sim \frac{1}{2}n d_i$. Therefore, we have $\frac{d_id_j}{2|E|} \to \gamma_{MQ} \frac{\log n}{n} $. That is, maximum modularity estimator is equivalent with $\hat{X}'$ when $\gamma = \gamma_{MQ}$ asymptotically.
 
-Using $a>b$ and the inequality $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions.
+
+Using $a>b$ and the inequality $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions in Theorem \ref{thm:error_rate}.
 
 
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
