@@ -398,20 +398,19 @@ Using $a>b$ and the inequality $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can ver
 
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
 From Theorem \ref{thm:phase_transition}, if we could sample from the Ising model, then with large probability, the sample
-is aligned with $X$. However, the exact sampling is difficult when $n$ is very large since the state space increases in
-a rate of $k^n$. Therefore, some approximation is
+is aligned with $X$. However, the exact sampling is difficult when $n$ is very large since the cardinality of the state space increases in
+the rate of $k^n$. Therefore, some approximation is
 necessary. The most common way to generate an Ising sample is using Metropolis sampling \cite{metropolis1953equation}. 
 Empirically speaking, starting from a random state, Metropolis algorithm updates the state by randomly selecting one position to flip at each iteration step.
-Then after some initial burning time, the generated samples can be regarded samples from Ising model.
+Then after some initial burning time, the generated samples can be regarded as samples from Ising model.
 
 The theoretical guarantee of Metropolis sampling is based on Markov chain. Under some general conditions, Metropolis samples are converging to
-the steady state of Markov chain. For Ising model, there is many previous works which have shown that
-the convergence of Metropolis sampling \cite{diaconis1998we}.
+the steady state of the Markov chain, which is the probability distribution to be approximated. For Ising model, there is many previous works which have shown that the convergence of Metropolis sampling \cite{diaconis1998we}.
 
 For our specific Ising model and energy term in \eqref{eq:energy},
-the pseudo code of our algorithm is summarized in \ref{alg:m}.
+the pseudo code of our algorithm is summarized in Algorithm \ref{alg:m}.
 This algorithm requires the number of the communities $k$ to be known and the parameter $\gamma$ is given.
-The iteration time $N$ should also be specified.
+The iteration time $N$ should also be specified in advance.
 \begin{algorithm}[H]
 	\caption{Metropolis sampling algorithm for SBM} \label{alg:m}
 	Inputs: the graph $G$, inverse temperature $\beta$, disassortative power $\gamma$ \\
@@ -430,17 +429,19 @@ The iteration time $N$ should also be specified.
 		\ENDFOR
 	\end{algorithmic}
 \end{algorithm}
-The computation of $\Delta H(r,s)$ needs $O(\log n)$ time. Generally speaking, when there is disassortative interaction in
-the Ising model, it needs to take $N=O(n\log n)$ to generate the sample for good approximation \cite{mcmc}.
-Under such assumption, the time complexity of Algorithm \ref{alg:m} is $n \log^2 n$.
+The computation of $\Delta H(r,s)$ needs $O(\log n)$ time from Lemma \ref{lem:lemmaDiff}.
+For some special Ising model with disassortative interaction, it needs to take $N=O(n\log n)$ to generate the sample for good approximation \cite{mcmc}. For our model, it is unknown whether $O(n\log n)$ is sufficient, and we empirically choose $N=O(n^2)$ in the experiments.
+Then the time complexity of Algorithm \ref{alg:m} is $n^2 \log n$.
 
 Using Metropolis sampling, we conduct a moderate simulation to verify Theorem \ref{thm:phase_transition}.
-We choose $n=3200, k=2$ and generate the random graph $G$ 1000 times. For each $G$, we further sample $1000n$ states and compute its
-occupation time on the state $\pm X$. The result is shown in the following figure.
+We choose $n=3200, k=2$, and the empirical accuracy is computed by $P_e = \frac{m_1m_2}\sum_{i=1}^{m_1} \sum_{j=1}^{m_2} \mathbbm{1}[\hat{X}^* = \pm X]$. $m_1$ is the number of times to generate the random graph. For each $G$, we further sample $m_2$ states by Algorithm \ref{alg:m} consecutively.
+To make good approximation, we choose $m_1=1000,m_2=1000n$.
+The result is shown in the following figure.
 \begin{figure}[!ht]
 	\includegraphics[width=0.45\textwidth]{beta_trans-2020-11-13.eps}
 	\caption{the accuracy of exact recovery by SIBM}
 \end{figure}
+
 The vertical red line $\beta=0.2$ represents the phase transition threshold. The point $(0.19,0.5)$ in the figure
 can be regarded as the empirical phase transition threshold, whose first coordinate is near to $\beta^* = 0.2$.
 The green line $(\beta, n^{g(\beta)/2})$ is the theoretical lower bound of accuracy for $\beta>0.2$ while the orange line
@@ -448,6 +449,10 @@ $(\beta, n^{-g(\beta)})$ is the theoretical upper bound of accuracy for $\beta <
 as $n$ is larger, the empirical accuracy curve (blue line in the figure) will approach the step function, which jumps from
 0 to 1 at $\beta=0.2$.
 \section{Conclusion}
+In this paper, we have studies one convergent estimator (in Theorem \ref{thm:ab12}) to infer the parameters of SBM and three estimators to detect communities of SBM.
+We give the exact recovery error upper bound for all the later three estimators (in Theorem \ref{thm:phase_transition}, \ref{thm:error_rate})
+and study their connections. By introducing Ising model, our work breaks a new path to study the exact recovery problem for SBM. More
+theoretical and empirical work will be done in the future such as the convergence of modularity (in \eqref{eq:Qtransform}) to the energy (in \eqref{eq:energy}), the necessary iteration time (in Algorithm \ref{alg:m}) for Metropolis sampling, and so on.
 \appendix
 \section*{Proof of Theorem \ref{thm:ab12}}
 \begin{lemma}\label{lem:ER_tr_counting}
