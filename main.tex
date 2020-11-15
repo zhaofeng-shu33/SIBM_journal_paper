@@ -157,13 +157,17 @@ Given the SBM, the exact recovery problem can be formally defined as follows:
 Given $X$, the random graph $G$ is drawn under $\SSBM(n,k,p,q)$. If there exists an algorithm that takes
 $G$ as input and outputs $\hat{X}$ such that
 \begin{equation*}
-P(\hat{X} \in S_k(X)) \to 1 \textrm{ as } n \to \infty
+P_a(\hat{X}):=P(\hat{X} \in S_k(X)) \to 1 \textrm{ as } n \to \infty
 \end{equation*}
 \end{definition}
 
-In the above definition, we have used the notation $\hat{X} \in S_k(X)$, which means that we can only
+In the above definition, the notation $P_a(\hat{X})$ is called the probability of accuracy for estimator $\hat{X}$.
+Let $P_e(\hat{X}) = 1 - P_a(\hat{X})$ represent the probability of error. Definition \ref{def:SSBMR} can also
+be formulated as $P_e(\hat{X}) \to 0$ as $n\to \infty$.
+The notation $\hat{X} \in S_k(X)$ means that we can only
 expect a recovery up to a global permutation of the ground truth label vector $X$. This is common in unsupervised
-learning as no anchor exists to assign labels to different communities. Besides, given a graph $G$, the algorithm can
+learning as no anchor exists to assign labels to different communities.
+Besides, given a graph $G$, the algorithm can
 be either deterministic or stochastic. The probability of $\hat{X} \in S_k(X)$ should be understood as 
 $\sum_{G \in \cG_n} P_G(G) P_{\hat{X}|G}(\hat{X} \in S_k(X))$, which reduced to 
 $P_G(\hat{X} \in S_k(X))$ for deterministic algorithm.
@@ -241,18 +245,8 @@ Secondly, we allow the state at each node to take $k$ values from $W$.
 When $\gamma = 0$ and $k=2$, Definition \ref{def:ising}
 reduces to the classical definition up to a scaling factor.
 
-We have defined Ising model as a probability distribution conditioned on $G$.
-If we take an average over all graph sampled from SBM, we can get the marginal distribution for the state vector $\sigma$.
-This is exactly what Stochastic Ising Block Model (SIBM) model says:
-\begin{definition}[Stochastic Ising Block Model]
-	Given a label $X$, $P_G$ is a distribution given by $\SSBM(n,k,\A,\B)$, Stochastic Ising Block Model
-	is a probability distribution on $V$ such that
-\begin{equation}\label{eq:sibm}
-P_{\SIBM}(\sigma = \bar{\sigma}) = \sum_{G \in \cG_n} P_G(G) P_{\sigma | G}(\sigma = \bar{\sigma}) 
-\end{equation}
-\end{definition}
-Definition \ref{def:ising} gives a stochastic estimator $\hat{X}^*$ for $X$. $\hat{X}^*$ is one sample generated from Ising model. The exact recovery error probability for such algorithm can be written using the notation of SIBM as $P_{\SIBM}(\sigma \not\in S_k(X))$. We can see from this expression that error probability is determined
-by two parameters $(\gamma, \beta)$. When these parameters take proper value, $P_{\SIBM}(\sigma \not\in S_k(X)) \to 0$ and the exact recovery of SBM is achievable. On the contrary, $P_{\SIBM}(\sigma \not\in S_k(X)) \to 1$ if $(\gamma, \beta)$ takes other values.
+Definition \ref{def:ising} gives a stochastic estimator $\hat{X}^*$ for $X$. $\hat{X}^*$ is one sample generated from Ising model. The exact recovery error probability for $\hat{X}^*$ can be written as $P_e(\hat{X}^*) := \sum_{G \in \cG_n} P_G(G) P_{\sigma | G}(S^c_k(X))$. We can see from this expression that error probability is determined
+by two parameters $(\gamma, \beta)$. When these parameters take proper value, $ P_e(\hat{X}^*)\to 0$ and the exact recovery of SBM is achievable. On the contrary, $P_e(\hat{X}^*) \to 1$ if $(\gamma, \beta)$ takes other values.
 These two cases are summarized in the following theorem:
 \begin{theorem}\label{thm:phase_transition}
 Define the function $g(\beta), \tilde{g}(\beta)$ as follows:
@@ -274,9 +268,9 @@ $$
 which is the solution to the equation $g(\beta) = 0$ and $\beta^* < \bar{\beta}$. Then depending on
 how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficiently large, we have
 \begin{enumerate}
-\item If $\gamma > b$ and $\beta > \beta^*$,  $P_{\SIBM}(\sigma \not\in S_k(X)) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
-\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma \in S_k(X)) \leq (1+o(1))\max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}\}$;
-\item If $\gamma < b$, $P_{\SIBM}(\sigma \in S_k(X)) \leq \exp(-C n)$ for any $C>0$.
+\item If $\gamma > b$ and $\beta > \beta^*$,  $P_e(\hat{X}^*) \leq n^{\tilde{g}(\beta)/2 + \epsilon}$;
+\item If $\gamma > b$ and $\beta < \beta^*$, $P_a(\hat{X}^*) \leq (1+o(1))\max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}\}$;
+\item If $\gamma < b$, $P_a(\hat{X}^*) \leq \exp(-C n)$ for any $C>0$.
 \end{enumerate}
 \end{theorem}
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
