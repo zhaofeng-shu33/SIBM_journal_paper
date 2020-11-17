@@ -434,8 +434,8 @@ For some special Ising model with disassortative interaction, it needs to take $
 Then the time complexity of Algorithm \ref{alg:m} is $n^2 \log n$.
 
 Using Metropolis sampling, we conduct a moderate simulation to verify Theorem \ref{thm:phase_transition}.
-We choose $n=3200, k=2$, and the empirical accuracy is computed by $P_e = \frac{m_1m_2}\sum_{i=1}^{m_1} \sum_{j=1}^{m_2} \mathbbm{1}[\hat{X}^* = \pm X]$. $m_1$ is the number of times to generate the random graph. For each $G$, we further sample $m_2$ states by Algorithm \ref{alg:m} consecutively.
-To make good approximation, we choose $m_1=1000,m_2=1000n$.
+We choose $n=3200, k=2$, and the empirical accuracy is computed by $P_e = \frac{1}{m_1m_2}\sum_{i=1}^{m_1} \sum_{j=1}^{m_2} \mathbbm{1}[\hat{X}^* = \pm X]$. $m_1$ is the number of times to generate the random graph. For each $G$, we further sample $m_2$ states by Algorithm \ref{alg:m} consecutively.
+To make good approximation, we choose $m_1=1000,m_2=5000$.
 The result is shown in the following figure.
 \begin{figure}[!ht]
 	\includegraphics[width=0.45\textwidth]{beta_trans-2020-11-13.eps}
@@ -785,6 +785,75 @@ Therefore, from \eqref{eq:knd} we have
 	\frac{P_{\sigma|G}(\dist(\sigma, X)=1)}
 {P_{\sigma|G}(\sigma=X)} \geq (1+o(1)) n^{g(\beta_n)}
 \end{equation*}
+\end{proof}
+\begin{lemma}\label{lem:small}
+	Suppose $\gamma < b $ and $\bar{\sigma}$ satisfies $\dist(\bar{\sigma}, \mathbf{1}_n) \geq \frac{n}{\sqrt{\log  n}}$
+	and $D(\bar{\sigma}, \mathbf{1}_n)$.
+	Then the event
+	$P_{\sigma | G}(\sigma = \bar{\sigma} ) > \exp(-Cn) P_{\sigma | G}(\sigma = \mathbf{1}_n)$
+	happens with probability (w.r.t. SSBM) less than $\exp(-\tau(\alpha,\beta) n \sqrt{\log  n} )$ where $C$ is an arbitrary constant, $\tau(\alpha,\beta)$ is a positive number.
+\end{lemma}
+\begin{proof}
+	Let $n_r = |\{\bar{\sigma}_i = w^r | i\in [n] \}|$. Then $n_0 \geq n_r$ for $r=1, \dots, k-1$ since  $\arg\,\min_{\sigma'\in \Lambda} \dist(\bar{\sigma}, \sigma') = \mathbf{1}_n$.
+	Without loss of generality,
+	we suppose $n_0 \geq n_1 \dots \geq n_{k-1}$.
+	Define $N_{\bar{\sigma}} = \frac{1}{2}(n(n-1) - \sum_{r=0}^{k-1} n_r(n_r-1))
+	=\frac{1}{2}(n^2 - \sum_{r=0}^{k-1} n_r^2)$.
+	Denote the event $P_{\sigma | G}(\sigma = \bar{\sigma} ) > \exp(-Cn) P_{\sigma | G}(\sigma = \mathbf{1}_n)$ as $D'(\bar{\sigma}, C)$,
+	which can be transformed as
+	\begin{align}
+	(1 + \frac{\gamma \log n}{n})
+	\left( \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} Z_{ij} + \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} Z'_{ij} \right)　\notag\\
+	\leq \frac{\gamma \log n}{n} N_{\bar{\sigma}} + \frac{C}{\beta} n　\label{eq:small}
+	\end{align}
+	where $Z_{ij}$ i.i.d. $\sim \textrm{Bernoulli}(\frac{a\log n}{n})$ and $Z'_{ij}$ i.i.d. $\sim \textrm{Bernoulli}(\frac{b \log n}{n})$.
+	
+	Firstly we estimate the order of $N_{\bar{\sigma}}$, obviously $N_{\bar{\sigma}} \leq \frac{1}{2} n^2$.
+	Using the conclusion in Appendix A of \cite{chen2016information} we have
+	\begin{equation}
+	\sum_{r=0}^{k-1} n_r^2 \leq
+	\begin{cases}
+	n n_0 & n_0 \leq \frac{n}{2} \\
+	n^2 - 2n_0(n-n_0) & n_0 > \frac{n}{2}
+	\end{cases}
+	\end{equation}
+	By assumption of $\dist(\bar{\sigma}, \mathbf{1}_n) \geq \frac{n}{\sqrt{\log n}}$, we have $n_0 \leq n - \frac{n}{\sqrt{\log n}}$
+	and $n_0 \geq \frac{n}{k}$ follows from $n_0 \geq n_r$.
+	When $n_0 > \frac{n}{2}$,
+	we have $N_{\bar{\sigma}} \geq n_0 (n - n_0) \geq \frac{n^2}{\sqrt{\log n}}(1+o(1))$.
+	The second inequality is achieved if $n_0 = n - \frac{n}{\sqrt{\log n}}$.
+	When $n_0 < \frac{n}{2}$,
+	$N_{\bar{\sigma}} \geq \frac{n^2 - nn_0}{2} \geq \frac{n^2}{4}$ and the second inequality is achieved when $n_0 = \frac{n}{2}$.
+	So generally we have $\frac{n^2}{\sqrt{\log n}}(1+o(1)) \leq N_{\bar{\sigma}} \leq \frac{n^2}{4}$.
+	
+	Since $\frac{C}{\beta} n = o(\frac{\log n}{n} N_{\bar{\sigma}})$ we can rewrite \eqref{eq:small} as
+	\begin{equation}
+	\left( \sum_{\substack{\bar{\sigma}_i  \neq \bar{\sigma}_j \\ X_i = X_j}} -Z_{ij}
+	+ \sum_{\substack{\bar{\sigma}_i  \neq \bar{\sigma}_j \\ X_i \neq X_j}} -Z'_{ij} \right)\geq -\gamma\frac{\log n N_{\bar{\sigma}}}{n}(1+o(1))
+	\end{equation}
+	Let $N_1 = \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} 1$
+	and $N_2 = \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} 1 = N_{\bar{\sigma}} - N_1$
+	
+	Using Chernoff inequality we have
+	\begin{align*}
+	P_G(D'(\bar{\sigma}, C))&
+	\leq (\mathbb{E}[\exp(-s Z_{ij})])^{N_1} (\mathbb{E}[\exp(-s Z'_{ij})])^{N_2} \\
+	&\cdot \exp(\gamma \frac{\log n N_{\bar{\sigma}} s}{n}(1+o(1))) \\
+	&= \exp \Big( \frac{\log n}{n}(1+o(1))(e^{-s}-1)(aN_1 + bN_2) \\
+	&+\gamma \frac{\log n N_{\bar{\sigma}} s}{n}(1+o(1))\Big)
+	\end{align*}
+	Since $s > 0$ and $a>b$, we further have
+	\begin{align*}
+	P_G(D'(\bar{\sigma}, C))
+	& \leq \exp( \frac{N_{\bar{\sigma}}\log n }{n}(b(e^{-s}-1)+ \gamma s + o(1))) 
+	\end{align*}
+	Let $h_b(x) = x - b -x\log \frac{x}{b}$, which satisfies $h_b(x) < 0$ for $0<x<b$,
+	and take $s=-\log\frac{\gamma}{b} > 0$, using 
+	$N_{\bar{\sigma}} \geq \frac{n^2}{\sqrt{\log n}}$ we have
+	\begin{align*}
+	P_G(D'(\bar{\sigma}, C))&\leq \exp( N_{\bar{\sigma}} \frac{\log n}{n} h_b(\gamma)(1+o(1))) \\
+	& \leq \exp (h_b(\gamma) n \sqrt{\log n} (1+o(1)))
+	\end{align*}
 \end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:phase_transition}]
 	Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
