@@ -15,6 +15,7 @@
 \newcommand{\A}{\frac{a \log(n)}{n}}
 \newcommand{\B}{\frac{b \log(n)}{n}}
 \newcommand{\cG}{\mathcal{G}}
+\newcommand{\cI}{\mathcal{I}}
 \newcommand{\1}{\mathbbm{1}}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\SSBM}{SSBM}
@@ -276,9 +277,11 @@ how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficien
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
 For sufficiently small $\epsilon$ and as $n \to \infty$, the upper bound in Theorem \ref{thm:phase_transition} all converges to $0$ at least
 in polynomial speed.
-Therefore, Theorem \ref{thm:phase_transition} establishes the sharp phase transition property of SIBM model.
+Therefore, Theorem \ref{thm:phase_transition} establishes the sharp phase transition property of Ising model.
 To illustrate Theorem
-\ref{thm:phase_transition} more clearly,
+\ref{thm:phase_transition} more clearly, we consider the marginal distribution for $\sigma: P_{\sigma}(\sigma =\bar{\sigma})
+=\sum_{G \in \cG_n}P_G(G)P_{\sigma |G}(\sigma=\bar{\sigma})$
+and
 let $D(\sigma, \sigma')$ be the event when $\sigma$ is nearest to $\sigma'$ among all its permutations.
 That is
 \begin{equation}
@@ -287,8 +290,8 @@ D(\sigma, \sigma') := \{ \sigma = \arg\min_{f \in S_k} \dist(f(\sigma), \sigma')
 Then Theorem \ref{thm:phase_transition} can be stated in the following way:
 \begin{corollary}\label{cor:phase4}
 \begin{enumerate}
-	\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = 1-o(1)$;
-	\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\SIBM}(\sigma = X | D(\sigma, X))  = o(1)$;
+	\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\sigma}(\sigma = X | D(\sigma, X))  = 1-o(1)$;
+	\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\sigma}(\sigma = X | D(\sigma, X))  = o(1)$;
 \end{enumerate}	
 \end{corollary}
 
@@ -483,8 +486,8 @@ theoretical and empirical work will be done in the future such as the convergenc
 	From \cite{holland1977method} we know that
 	% Mordern version: https://stats.stackexchange.com/questions/338267/distribution-and-variance-of-count-of-triangles-in-random-graph
 	\begin{align*}
-	\Var[T] & = \binom{n}{3} p^3 + 12 \binom{n}{4} p^5 + 30 \binom{n}{5} p^6 + 20 \binom{n}{6} p^6 - \binom{n}{3}^2 p^6 \\
-	 & = O(\log^3 n)
+	\Var[T] & = \binom{n}{3} p^3 + 12 \binom{n}{4} p^5 + 30 \binom{n}{5} p^6 + 20 \binom{n}{6} p^6\\
+	 &- \binom{n}{3}^2 p^6   = O(\log^3 n)
 	\end{align*}
 	Therefore
 	by Chebyshev's inequality
@@ -590,13 +593,44 @@ By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can sho
 	&+ \gamma \frac{\log n}{n} (m(\omega^s \cdot \bar{\sigma}_r)-m(\bar{\sigma}_r)+1)
 	\end{align*}
 \end{proof}
+Before diving into the technical proof of Theorem \ref{thm:phase_transition}, we need to introduce some extra
+notations. When $\bar{\sigma}$ differs from $X$ only at position $r$, taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
+\begin{equation}\label{eq:energy_diff}
+H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_r - A^s_r) + \gamma\frac{\log n}{n}
+\end{equation}
+where $A^s_r$ is defined as $A^s_r = |\{j \in [n]\backslash \{r\}: \{j, r\} \in E(G), X_j = \omega^s \cdot X_r \}|$.
+Since the existence of each edge in $G$ is independent, $A^s_r \sim \textrm{Bernoulli}(\frac{n}{k}, \B ) $ for $s\neq 0$
+and $A^s_0 \sim \textrm{Bernoulli}(\frac{n}{k}-1, \A )$.
+
+% Some additional notation is needed for the proof.
+For general case, we can write
+$$
+H(\bar{\sigma}) - H(X)=
+(1 + \gamma \frac{ \log n}{n})[A_{\bar{\sigma}} - B_{\bar{\sigma}}] + \gamma\frac{ \log n}{n} N_{\bar{\sigma}}
+$$
+in which we use $A_{\bar{\sigma}}$ (or $B_{\bar{\sigma}}$) to represent the binomial random variable with parameter $\A$ (or $\B$)
+respectively and $N_{\bar{\sigma}}$ is a deterministic positive number depending on $\bar{\sigma}$ but irrelevant with the graph structure.
+The following lemma gives the expression of $A_{\bar{\sigma}}, B_{\bar{\sigma}}$ and $N_{\bar{\sigma}}$:
+\begin{lemma}\label{lem:minus}
+	For SSBM$(n,k,p,q)$, suppose the ground truth label is $X$ while $\bar{\sigma}$ differs from $X$ in $|\cI|$ coordinate.
+	Let $I_{ij} = |\{r\in [n] | X_r = w^i, \sigma_r = w^j \}$ for $i\neq j$ and $I_{ii} = 0$. We further denote the row sum as $I_i = \sum_{j=0}^{k-1} I_{ij}$ and
+	the column sum as $I'_i = \sum_{j=0}^{k-1} I_{ji}$.
+	Then
+	\begin{align}
+	N_{\bar{\sigma}} &= \frac{1}{2}\sum_{i=0}^{k-1} (I_i - I_i')^2 \label{eq:N_w} \\
+	B_{\bar{\sigma}} & \sim \textrm{Bernoulli}(\frac{n}{k}|\cI| + \frac{1}{2}\sum_{i=0}^{k-1}  (-2 I'_i I_i  + I'^2_i - \sum_{j=0}^{k-1} I^2_{ji}) , q)\\
+	A_{\bar{\sigma}} & \sim \textrm{Bernoulli}(\frac{n}{k}|\cI| - \frac{1}{2}\sum_{i=0}^{k-1}  (I^2_i + \sum_{j=0}^{k-1} I^2_{ij}), p) \label{eq:A_w}
+	\end{align}
+\end{lemma}
+The proof of Lemma \ref{lem:minus} is mostly of careful counting techniques and we omit it here.
+When $|\cI|$ is small compared with $n$, we have the following Lemma, which is an extension of Proposition 6 in \cite{ye2020exact}. 
 \begin{lemma}\label{lem:enhanced_fb}
 	For $t\in [\frac{1}{k}(b-a), 0]$
-	and $ r \le n/\sqrt{\log n}$
+	and $ |\cI| \le n/\sqrt{\log n}$
 	\begin{equation} \label{eq:upmpt}
 	\begin{aligned}
-	& P_G(B_{\bar{\sigma}}-A_{\bar{\sigma}}\ge t r \log n)  \\
-	\le & \exp\Big(r\log n
+	& P_G(B_{\bar{\sigma}}-A_{\bar{\sigma}}\ge t |\cI| \log n)  \\
+	\le & \exp\Big(|\cI|\log n
 	\Big(f_{\beta}(t) - \beta t -1	+ O(\frac{1}{\sqrt{\log n}}) \Big)\Big) .
 	\end{aligned}
 	\end{equation}
@@ -604,9 +638,9 @@ By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can sho
 Corresponding to the three cases of Theorem \ref{thm:phase_transition}, we use three non-trivial lemmas to 
 establish the properties of Ising model.
 \begin{lemma}\label{lem:sigmaX}
-	Let $\gamma > b$. When $\dist(\bar{\sigma}, X) \geq \frac{n}{\sqrt{\log n}}$ and $\arg\,\min_{\sigma'\in S_k(X)} \dist(\bar{\sigma}, \sigma') = X$. The event
+	Let $\gamma > b$. When $\dist(\bar{\sigma}, X) \geq \frac{n}{\sqrt{\log n}}$ and $D(\bar{\sigma}, X)$. The event
 	$P_{\sigma | G}(\sigma = \bar{\sigma} ) > \exp(-Cn) P_{\sigma | G}(\sigma = X)$
-	happens with probability (w.r.t. SSBM) less than $\exp(-\tau(\alpha,\beta) n \log^{1-\delta} n )$ where $C$ is an arbitrary constant, $\tau(\alpha,\beta)$ is a positive number.
+	happens with probability (w.r.t. SSBM) less than $\exp(-\tau(\alpha,\beta) n \sqrt{\log  n} )$ where $C$ is an arbitrary constant, $\tau(\alpha,\beta)$ is a positive number.
 \end{lemma}
 
 \begin{lemma}\label{prop:small}
@@ -640,18 +674,6 @@ establish the properties of Ising model.
 \begin{proof}
 We distinguish the discussion between two cases: $r\leq \frac{n}{\sqrt{\log n}}$
 and $r > \frac{n}{\sqrt{\log n}}$.
-For $r=1$, taking $\bar{\sigma}=X$ in Lemma \ref{lem:lemmaDiff}, we have
-\begin{equation}\label{eq:energy_diff}
-H(\bar{\sigma}') - H(\bar{\sigma}) = (1+\gamma \frac{\log n}{n})(A^0_r - A^s_r) + \gamma\frac{\log n}{n}
-\end{equation}
-% Some additional notation is needed for the proof.
-Similar with \eqref{eq:energy_diff}, generally we can write
-$$
-H(\bar{\sigma}) - H(X)=
-(1 + \gamma \frac{ \log n}{n})[A_{\bar{\sigma}} - B_{\bar{\sigma}}] + \gamma\frac{ \log n}{n} N_{\bar{\sigma}}
-$$
-in which we use $A_{\bar{\sigma}}$ (or $B_{\bar{\sigma}}$) to represent the binomial random variable with parameter $\A$ (or $\B$)
-respectively and $N_{\bar{\sigma}}$ is a deterministic positive number, irrelevant with the graph structure.
 
 When $r\leq \frac{n}{\sqrt{\log n}}$, we can show that $\dist(\sigma, X) = r$ implies $D(\sigma, X)$ by using the triangle
 inequality of $\dist$. For $f \in S_k \backslash \{ id \}$, we have
@@ -856,7 +878,7 @@ Therefore, from \eqref{eq:knd} we have
 	\end{align*}
 \end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:phase_transition}]
-	Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
+	1) Since $P_{\SIBM}(\sigma \not \in S_k(X)) = \sum_{f\in S_k} P_{\SIBM}(\sigma \neq f(X) | D(\sigma, f(X))) P_{\SIBM}(D(\sigma, f(X)))$,
 	we only need to establish $P_{\SIBM}(\sigma \neq X | D(\sigma, X)) \leq k n^{\tilde{g}(\beta)/2 + \epsilon}$.
 	Let $\cG'_n = \cap_{r=1}^n \cG_n^{(r)}$, choose $\frac{\epsilon}{2}$, from \eqref{eq:Gr} we have
 	\begin{align*}
@@ -879,7 +901,7 @@ Therefore, from \eqref{eq:knd} we have
 	& \leq n^{\tilde{g}(\beta)/2 + \epsilon}
 	\end{align*}
 	
-	When $\beta < \beta^*$, using Lemma \ref{prop:large2}, for every $G \in \cG'_n$
+	2) When $\beta < \beta^*$, using Lemma \ref{prop:large2}, for every $G \in \cG'_n$
 	we can get
 	$$
 	\frac{1-P_{\sigma | G}(\sigma=X | D(\sigma, X))}{P_{\sigma | G}(\sigma=X | D(\sigma, X))}\geq (1+o(1))n^{g(\beta_n)}
@@ -895,6 +917,13 @@ Therefore, from \eqref{eq:knd} we have
 	& \leq (1+o(1))n^{g(\bar{\beta})} + (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{\tilde{g}(2\beta_n) - 2g(\beta_n) + \epsilon} \}\\
 	& \leq (1+o(1)) \max\{n^{g(\bar{\beta})}, n^{-g(\beta) + \epsilon}  \}
 	\end{align*}
+	3) When $\gamma < b$, for any $f\in S_k$, we have $\dist(f(X), \Lambda) = \frac{(k-1)n}{k} > \frac{n}{\sqrt{\log n}}$.
+	Therefore, using Lemma \ref{lem:small}, we can find a graph $\cG'_n$ such that $P_C(\cG'_n) \leq \exp(-nC)$
+	and for any $G\not \in \cG'_n$, $P_{\sigma |G}(\sigma = f(X)) \leq \exp(-Cn)$. Therefore,
+	\begin{align*}
+	P_a(\hat{X}^*) \leq P_G(\cG'_n) + k! \exp(-Cn) = (1+k!)\exp(-Cn)
+	\end{align*}
+	The conclusion of $P_a(\hat{X}^*) \leq \exp(-Cn)$ follows since $C$ can take any positive value.
 \end{proof}
 
 \section*{Proof of Theorem \ref{thm:error_rate}}
