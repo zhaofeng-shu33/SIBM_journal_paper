@@ -12,8 +12,8 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 \newtheorem{remark}{Remark}
-\newcommand{\A}{\frac{a \log(n)}{n}}
-\newcommand{\B}{\frac{b \log(n)}{n}}
+\newcommand{\A}{\frac{a \log n}{n}}
+\newcommand{\B}{\frac{b \log n}{n}}
 \newcommand{\cG}{\mathcal{G}}
 \newcommand{\cI}{\mathcal{I}}
 \newcommand{\1}{\mathbbm{1}}
@@ -325,7 +325,7 @@ is also $O(\log n)$.
 When $H(\bar{\sigma}') > H(\bar{\sigma})$, we can expect $P_{\sigma | G}(\sigma = \bar{\sigma}')$ is far less than 
 $P_{\sigma | G}(\sigma = \bar{\sigma})$.
 If  $ \sum_{\dist(\sigma', X)=1}\exp(-\beta(H(\bar{\sigma}') - H(X))) $ converges to zero,
-we can expect the probability of all other states differing $S_k(X)$ converges to zero.
+we can expect the probability of all other states differing from $S_k(X)$ converges to zero.
 On the contrary, if $ \sum_{\dist(\sigma', X)=1}\exp(-\beta(H(\bar{\sigma}') - H(X))) $ tends to infinity,
 then we have $P_{\sigma}(S_k(X))$ converges to zero. This illustrates the idea behind
 the proof of
@@ -335,8 +335,8 @@ Theorem \ref{thm:phase_transition}, which can be found in the Appendix.
 \section{Community Detection via Energy Minimization}\label{sec:em}
 Since $\beta^*$ is irrelevant with $n$, when $\gamma>b$, we can choose a sufficiently large $\beta$ such that
 $\beta > \beta^*$, then by Theorem \ref{thm:phase_transition}, with almost 1 probability $\sigma \in S_k(X)$, which
-implies that $P_{\sigma | G}(\sigma = X)$ has the largest probability for almost all graph $G$. Instead of generating
-the sample from the Ising model, we can directly maximize the conditional probability to find this state with the largest probability.
+implies that $P_{\sigma | G}(\sigma = X)$ has the largest probability for almost all graph $G$. Therefore, instead of generating
+the sample from the Ising model, we can directly maximize the conditional probability to find the state with the largest probability.
 Or equivalently, we can proceed by minimizing the energy term in \eqref{eq:energy}:
 \begin{equation}\label{eq:hatX}
 \hat{X}' := \arg\min_{\bar{\sigma} \in W^n} H(\bar{\sigma})
@@ -344,19 +344,19 @@ Or equivalently, we can proceed by minimizing the energy term in \eqref{eq:energ
 
 In \eqref{eq:hatX}, we allow $\bar{\sigma}$ to take values from $W^n$. Since we know the ground truth label $X$ has equal
 size $|\{v \in [n] : X_v = u\}| = \frac{n}{k}$, another formulation is to restrict the search space to
-$W^*:= \{\sigma \big\vert |\{v \in [n] : \sigma_v = \omega^s\}| = \frac{n}{k}, s=0,1, \dots, k \}$.
+$W^*:= \{\sigma \big\vert |\{v \in [n] : \sigma_v = \omega^s\}| = \frac{n}{k}, s=0,\dots, k-1 \}$.
 When $\sigma \in W^*$, minimizing $H(\sigma)$ is equivalent to
 \begin{equation}
-\hat{X}'' = \min_{\sigma \in W^*} \sum_{\{i,j\} \not\in E(G) } \delta(\sigma_i, \sigma_j)
+\hat{X}'' = \arg\min_{\sigma \in W^*} \sum_{\{i,j\} \not\in E(G) } \delta(\sigma_i, \sigma_j)
 \end{equation}
-which is the minimum cut between different detected communities.
+where the minimal value is the minimum cut between different detected communities.
 
 When $\hat{X}'' \neq X'$, we must have $\dist(\hat{X}'' ,X)\geq 2$ to satisfy the constraint $\hat{X}'' \in W^*$.
 Besides, the estimator of $\hat{X}''$ is parameter-free while $\hat{X}'$ depends on $\gamma$. The extra parameter $\gamma$ in the expression of
 $\hat{X}'$ can be regarded as a kind of Lagrange multiplier for this integer programming problem. Thus the optimization problem for $\hat{X}'$
 is a relaxation of that for $\hat{X}''$ by introducing a penalized term and enlarging the searched space from $W^*$ to $W$.
 
-When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value. Therefore, from Theorem \ref{thm:phase_transition} we can get that $n^{g(\bar{\beta})/2}$ is the fastest error rate upper bound for Ising estimator $\hat{X}^*$.
+When $\beta > \bar{\beta}$, $\tilde{g}(\beta)$ becomes a constant value. Therefore, we can get $n^{g(\bar{\beta})/2}$ as the tightest error upper bound for Ising estimator $\hat{X}^*$ from Theorem \ref{thm:phase_transition}.
 For the estimator $\hat{X}'$ and $\hat{X}''$, we can obtain sharper error upper bound, which is
 summarized in the following theorem:
 \begin{theorem}\label{thm:error_rate}
@@ -371,8 +371,8 @@ Theorem \ref{thm:error_rate} implies that $P_e(\hat{X}'')$ has the sharpest uppe
 This can be intuitively understood as the result of smaller search space.
 The proof technique of Theorem \ref{thm:error_rate} is to consider the probability of events when $P_G(G | X) < P_G(G | \sigma)$
 for $\dist(\sigma, X) \geq 1$. Then using union bound to sum them up.
-This technique has been used in \cite{abbe2015exact} for $k=2$ to show exact recovery by maximum likelihood is possible
-when $\sqrt{a} - \sqrt{b} > 2$ while a loose bound $n^{g(\bar{\beta})/4}$ is obtained.
+This technique has been used in \cite{abbe2015exact} for $k=2$ to show that exact recovery by maximum likelihood is possible
+when $\sqrt{a} - \sqrt{b} > 2$. But only a loose bound $n^{g(\bar{\beta})/4}$ is obtained.
 For general case, since $\tilde{g}(\beta) = 1- \frac{(\sqrt{a} - \sqrt{b})^2}{k}$, Theorem \ref{thm:error_rate} implies that exact recovery is possible using $\hat{X}'$ as long as  
 $\sqrt{a} - \sqrt{b} > \sqrt{k}$ is satisfied.
 
@@ -386,26 +386,26 @@ From \eqref{eq:GmL}, this function can be written as
 $$
 \log P_G(Z|X=\sigma) = -\log\frac{a}{b} \cdot H(\sigma) + C
 $$
-where $\gamma \frac{\log n}{n} = \frac{1}{\log(a/b)}(\log (1-\A) - \log (1-\B))$ and $C$ is a constant irrelevant with $\sigma$.
+where the $\gamma$ term in $H(\sigma)$ satisfying $\gamma \frac{\log n}{n} = \frac{1}{\log(a/b)}(\log (1-\A) - \log (1-\B))$ and $C$ is a constant irrelevant with $\sigma$.
 When $n$ is sufficiently large, we have $\gamma \to \gamma_{ML} := \frac{a-b}{\log(a/b)}$.
 That is, maximum likelihood estimator is equivalent with $\hat{X}'$ when $\gamma = \gamma_{ML}$ asymptotically.
 
 
-Maximum modularity estimator is obtained by maximizing the modularity of a graph, which is defined by
+Maximum modularity estimator is obtained by maximizing the modularity of a graph \cite{clauset2004finding}, which is defined by
 \begin{align}\label{eq:Q}
 Q &= \frac{1}{2 |E|} \sum_{ij} (A_{ij} - \frac{d_i d_j}{2 |E|}) \delta(C_i, C_j)
 \end{align}
-where $d_i$ is the degree of the $i$-th node and $A$ is the adjacency matrix.
-The modularity $Q$ can be re-written using the node label $\sigma$ as:
+For the $i$-th node, $d_i$ is its degree and $C_i$ is its community belonging. $A$ is the adjacency matrix.
+Up to a scaling factor, the modularity $Q$ can be re-written using the label $\sigma$ as:
 \begin{align}
 Q(\sigma) = &-\sum_{\{i,j\} \not\in E(G) } \frac{d_i d_j}{2 |E|}\delta(\sigma_i,\sigma_j) \notag \\
 &+ \sum_{\{i,j\} \in E(G) } (1 - \frac{d_i d_j}{2 |E|}) \delta(\sigma_i,\sigma_j)  \label{eq:Qtransform}
 \end{align}
-From \eqref{eq:Qtransform}, we can show that $Q(\sigma) \to -H(\sigma)$ with $\gamma = \gamma_{MQ} = \frac{a+b}{2}$ as $n\to \infty$.
-Indeed, we have $d_i \sim \frac{\log n(a+b)}{2}, |E| \sim \frac{1}{2}n d_i$. Therefore, we have $\frac{d_id_j}{2|E|} \to \gamma_{MQ} \frac{\log n}{n} $. That is, maximum modularity estimator is equivalent with $\hat{X}'$ when $\gamma = \gamma_{MQ}$ asymptotically.
+From \eqref{eq:Qtransform}, we can see that $Q(\sigma) \to -H(\sigma)$ with $\gamma = \gamma_{MQ} = \frac{a+b}{2}$ as $n\to \infty$.
+Indeed, we have $d_i \sim \frac{(a+b)\log n}{2}, |E| \sim \frac{1}{2}n d_i$. Therefore, we have $\frac{d_id_j}{2|E|} \to \gamma_{MQ} \frac{\log n}{n} $. That is, maximum modularity estimator is equivalent with $\hat{X}'$ when $\gamma = \gamma_{MQ}$ asymptotically.
 
 
-Using $a>b$ and the inequality $\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions in Theorem \ref{thm:error_rate}.
+Using $a>b$ and the inequality $x-1>\log x > 2 \frac{x-1}{x+1}$ for $x>1$ we can verify that $\gamma_{MQ} > \gamma_{ML} > b$. That is, both maximum likelihood and maximum modularity satisfy the exact recovery conditions in Theorem \ref{thm:error_rate}.
 
 
 \section{Community Detection based on Metropolis Sampling}\label{sec:ms}
@@ -417,11 +417,11 @@ Empirically speaking, starting from a random state, Metropolis algorithm updates
 Then after some initial burning time, the generated samples can be regarded as samples from Ising model.
 
 The theoretical guarantee of Metropolis sampling is based on Markov chain. Under some general conditions, Metropolis samples are converging to
-the steady state of the Markov chain, which is the probability distribution to be approximated. For Ising model, there is many previous works which have shown that the convergence of Metropolis sampling \cite{diaconis1998we}.
+the steady state of the Markov chain, which is the probability distribution to be approximated. For Ising model, there are many previous works which have shown that the convergence of Metropolis sampling \cite{diaconis1998we}.
 
 For our specific Ising model and energy term in \eqref{eq:energy},
 the pseudo code of our algorithm is summarized in Algorithm \ref{alg:m}.
-This algorithm requires the number of the communities $k$ to be known and the parameter $\gamma$ is given.
+This algorithm requires the number of the communities $k$ is known and the parameter $\gamma$ is given.
 The iteration time $N$ should also be specified in advance.
 \begin{algorithm}[H]
 	\caption{Metropolis sampling algorithm for SBM} \label{alg:m}
@@ -461,10 +461,10 @@ $(\beta, n^{-g(\beta)})$ is the theoretical upper bound of accuracy for $\beta <
 as $n$ is larger, the empirical accuracy curve (blue line in the figure) will approach the step function, which jumps from
 0 to 1 at $\beta=0.2$.
 \section{Conclusion}
-In this paper, we have studies one convergent estimator (in Theorem \ref{thm:ab12}) to infer the parameters of SBM and three estimators to detect communities of SBM.
+In this paper, we have given one convergent estimator (in Theorem \ref{thm:ab12}) to infer the parameters of SBM and analyzed three estimators to detect communities of SBM.
 We give the exact recovery error upper bound for all the later three estimators (in Theorem \ref{thm:phase_transition}, \ref{thm:error_rate})
-and study their connections. By introducing Ising model, our work breaks a new path to study the exact recovery problem for SBM. More
-theoretical and empirical work will be done in the future such as the convergence of modularity (in \eqref{eq:Qtransform}) to the energy (in \eqref{eq:energy}), the necessary iteration time (in Algorithm \ref{alg:m}) for Metropolis sampling, and so on.
+and study their relationships. By introducing Ising model, our work makes a new path to study the exact recovery problem for SBM. More
+theoretical and empirical work will be done in the future such as the convergence analysis on modularity (in \eqref{eq:Qtransform}), the necessary iteration time (in Algorithm \ref{alg:m}) for Metropolis sampling, and so on.
 \appendix
 \section*{Proof of Theorem \ref{thm:ab12}}
 \begin{lemma}\label{lem:ER_tr_counting}
