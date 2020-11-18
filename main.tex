@@ -95,6 +95,7 @@ $V=\{1,\dots, n\} =: [n]$;
 the label of each node is $X_i$, which is chosen from $W= \{1, \omega, \dots, \omega^{k-1}\}$ and we further require $W$
 is a cyclic group with order $k$; $W^n$ is the n-ary Cartesian power of $W$;
 $f$ is a permutation function on $W$ and applied to $W^n$ in elementwise way;
+$U^c$ is the complement set of $U \in W^n$;  
 the set $S_k$ is used to represent all permutation functions on $W$ and $S_k(\sigma):=\{f(\sigma)| f\in S_k\}$ for $\sigma \in W^n$;
 the indicator function $\delta(x,y)$ is defined as
 $\delta(x,y) = 1 $ when $x=y$, and $\delta(x,y)=0$ when $x\neq y$;
@@ -245,11 +246,11 @@ connecting edges for each node.
 The probability of each state is proportional to $\exp(-\beta H(\bar{\sigma}))$, and the state with the largest
 probability corresponds to that with the lowest energy.
 
-There are two main difference of Definition \ref{def:ising} with the classical one. Firstly we add a compulsory term
+There are two main differences of Definition \ref{def:ising} with the classical one. Firstly we add a compulsory term
 between nodes without an edge connection. This makes these nodes have larger probability to take different labels.
 Secondly, we allow the state at each node to take $k$ values from $W$.
 When $\gamma = 0$ and $k=2$, Definition \ref{def:ising}
-reduces to the classical definition up to a scaling factor.
+reduces to the classical definition of Ising model up to a scaling factor.
 
 Definition \ref{def:ising} gives a stochastic estimator $\hat{X}^*$ for $X$. $\hat{X}^*$ is one sample generated from Ising model. The exact recovery error probability for $\hat{X}^*$ can be written as $P_e(\hat{X}^*) := \sum_{G \in \cG_n} P_G(G) P_{\sigma | G}(S^c_k(X))$. We can see from this expression that error probability is determined
 by two parameters $(\gamma, \beta)$. When these parameters take proper value, $ P_e(\hat{X}^*)\to 0$ and the exact recovery of SBM is achievable. On the contrary, $P_e(\hat{X}^*) \to 1$ if $(\gamma, \beta)$ takes other values.
@@ -280,7 +281,7 @@ how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficien
 \end{enumerate}
 \end{theorem}
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
-For sufficiently small $\epsilon$ and as $n \to \infty$, the upper bound in Theorem \ref{thm:phase_transition} all converges to $0$ at least
+For sufficiently small $\epsilon$ and as $n \to \infty$, the upper bounds in Theorem \ref{thm:phase_transition} all converge to $0$ at least
 in polynomial speed.
 Therefore, Theorem \ref{thm:phase_transition} establishes the sharp phase transition property of Ising model.
 To illustrate Theorem
@@ -300,8 +301,8 @@ Then Theorem \ref{thm:phase_transition} can be stated in the following way:
 \end{enumerate}	
 \end{corollary}
 
-The rest of this section is devoted to the proof of Theorem \ref{thm:phase_transition}, which relies on the
-careful analysis on the one-flip energy difference. This useful result is summarized in the following lemma:
+Below we outline the proof ideas of Theorem \ref{thm:phase_transition}, which relies on the analysis of the one-flip energy difference.
+This useful result is summarized in the following lemma:
 \begin{lemma}\label{lem:lemmaDiff}
 	Suppose $\bar{\sigma}'$ differs from $\bar{\sigma}$ only at position $r$ by $\bar{\sigma}'_r = \omega^s \cdot \bar{\sigma}_r$.
 	Then the change of energy is
@@ -321,11 +322,14 @@ equality:
 Besides, since the graph is sparse and every node has $O(\log n)$ neighbors, the computational cost (time complexity) for the energy difference
 is also $O(\log n)$. 
 
-When $H(\bar{\sigma}') < H(\bar{\sigma})$, we can expect $P_{\sigma | G}(\sigma = \bar{\sigma}')$ is far less than 
-$P_{\sigma | G}(\sigma = \bar{\sigma})$. However,
-since $G$ is sampled from SBM, the righthand side of \eqref{eq:Pratio} is a random variable. The proof of
-Theorem \ref{thm:phase_transition} lies at the detailed analysis of the probabilistic property
-of $ \exp(-\beta(H(\bar{\sigma}') - H(\bar{\sigma}))) $ and can be found in the Appendix.
+When $H(\bar{\sigma}') > H(\bar{\sigma})$, we can expect $P_{\sigma | G}(\sigma = \bar{\sigma}')$ is far less than 
+$P_{\sigma | G}(\sigma = \bar{\sigma})$.
+If  $ \sum_{\dist(\sigma', X)=1}\exp(-\beta(H(\bar{\sigma}') - H(X))) $ converges to zero,
+we can expect the probability of all other states differing $S_k(X)$ converges to zero.
+On the contrary, if $ \sum_{\dist(\sigma', X)=1}\exp(-\beta(H(\bar{\sigma}') - H(X))) $ tends to infinity,
+then we have $P_{\sigma}(S_k(X))$ converges to zero. This illustrates the idea behind
+the proof of
+Theorem \ref{thm:phase_transition}, which can be found in the Appendix.
 
 
 \section{Community Detection via Energy Minimization}\label{sec:em}
