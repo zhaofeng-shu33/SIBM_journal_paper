@@ -474,7 +474,7 @@ theoretical and empirical work will be done in the future such as the convergenc
 \end{lemma}
 \begin{proof}
 		Let $X_{ij}$ represents a Bernoulli random variable with parameter $p$. Then $|E| = \sum_{i,j} X_{ij}$, $X_{ij}$ are i.i.d.
-	$E[T(G)] = \frac{n(n-1)}{2}p = \frac{(n-1)\log n}{2}a$ and $\Var[|E|] = \frac{n(n-1)}{2} p(1-p) < a\frac{(n-1)\log n}{2}$
+	$\mathbb{E}[T(G)] = \frac{n(n-1)}{2}p = \frac{(n-1)\log n}{2}a$ and $\Var[|E|] = \frac{n(n-1)}{2} p(1-p) < a\frac{(n-1)\log n}{2}$
 	Then by Chebyshev's inequality
 	\begin{align*}
 	P(\Big|\frac{|E|}{n \log n } - \frac{a}{2} \frac{n-1}{n}\Big| > \epsilon) & \leq
@@ -491,7 +491,7 @@ theoretical and empirical work will be done in the future such as the convergenc
 	
 	Let $X_{ijk}$ represents a Bernoulli random variable with parameter $p^3$.
 	Then $T = \sum_{i,j,k} X_{ijk}$.
-	It is easy to compute that $E[T] = \binom{n}{3}p^3$. Since $X_{ijk}$ are not independent, the variance of $T$ needs careful calculation.
+	It is easy to compute that $\mathbb{E}[T] = \binom{n}{3}p^3$. Since $X_{ijk}$ are not independent, the variance of $T$ needs careful calculation.
 	From \cite{holland1977method} we know that
 	% Mordern version: https://stats.stackexchange.com/questions/338267/distribution-and-variance-of-count-of-triangles-in-random-graph
 	\begin{align*}
@@ -507,8 +507,8 @@ theoretical and empirical work will be done in the future such as the convergenc
 	Hence, $\frac{T}{\log^3 n} \to \frac{a^3}{6}$.
 \end{proof}
 The convergence of $|E|$ in ER graph can be extended directly to SBM since the existence of each edge is independent.
-But for $T$, it is a little tricky since the existence of each triangle is dependent with each other.  We need the following two lemmas
-to proceed.
+But for $T$, it is a little tricky since the existence of each triangle is dependent with each other. The following two lemmas
+give the formula for the variance of inter-community triangles in SBM.
 \begin{lemma}\label{lem:SBM_tr_counting_cross}
 	Consider a 2 community SBM $(2n, p, q)$ and count the number of triangles $T$ which has a node in $S_1$ and an edge in $S_2$.
 Then the variance of $T$ is
