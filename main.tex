@@ -215,7 +215,7 @@ the empirical mean squared error $\frac{1}{m} \sum_{i=1}^m (\hat{a}-a)^2 + (\hat
 and choosing $m=1000$, we obtain the following figure.
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=0.45\textwidth]{estimator-error-2020-11-12.eps}
+	\includegraphics[width=0.45\textwidth]{estimator-error-2020-11-22.eps}
 	\caption{estimation error with respect to $n$}
 \end{figure}
 From this figure we can see that as $n$ increases, MSE decreases polynomially fast. Therefore, the convergence
@@ -283,12 +283,18 @@ how $(\gamma, \beta)$ take values, $\forall \epsilon > 0$, when $n$ is sufficien
 By simple calculus, $\tilde{g}(\beta) < 0$ for $\beta> \beta^*$ and $g(\beta)>0$ for $\beta < \beta^*$.
 For sufficiently small $\epsilon$ and as $n \to \infty$, the upper bounds in Theorem \ref{thm:phase_transition} all converge to $0$ at least
 in polynomial speed.
-Therefore, Theorem \ref{thm:phase_transition} establishes the sharp phase transition property of Ising model.
-To illustrate Theorem
-\ref{thm:phase_transition} more clearly, we consider the marginal distribution for $\sigma: P_{\sigma}(\sigma =\bar{\sigma})
-=\sum_{G \in \cG_n}P_G(G)P_{\sigma |G}(\sigma=\bar{\sigma})$
-and
-let $D(\sigma, \sigma')$ be the event when $\sigma$ is nearest to $\sigma'$ among all its permutations.
+Therefore, Theorem \ref{thm:phase_transition} establishes the sharp phase transition property of Ising model, which is illustrated
+in Fig. \ref{fig:pt}.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.45\textwidth]{phase_trans.eps}
+	\caption{Phase transition region with respect to $(\beta, \gamma)$ plane}\label{fig:pt}
+\end{figure}
+
+Theorem
+\ref{thm:phase_transition} can also be understood from the marginal distribution for $\sigma: P_{\sigma}(\sigma =\bar{\sigma})
+=\sum_{G \in \cG_n}P_G(G)P_{\sigma |G}(\sigma=\bar{\sigma})$.
+Let $D(\sigma, \sigma')$ be the event when $\sigma$ is nearest to $\sigma'$ among all its permutations.
 That is
 \begin{equation}
 D(\sigma, \sigma') := \{ \sigma = \arg\min_{f \in S_k} \dist(f(\sigma), \sigma')  \}
@@ -298,7 +304,7 @@ Then Theorem \ref{thm:phase_transition} can be stated in the following way:
 \begin{enumerate}
 	\item If $\gamma > b$ and $\beta > \beta^*$, $P_{\sigma}(\sigma = X | D(\sigma, X))  = 1-o(1)$;
 	\item If $\gamma > b$ and $\beta < \beta^*$, $P_{\sigma}(\sigma = X | D(\sigma, X))  = o(1)$;
-\end{enumerate}	
+\end{enumerate}
 \end{corollary}
 
 Below we outline the proof ideas of Theorem \ref{thm:phase_transition}, which relies on the analysis of the one-flip energy difference.
