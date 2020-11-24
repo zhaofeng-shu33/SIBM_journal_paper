@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{bbm}
+\usepackage{bookmark}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{graphicx}
@@ -480,8 +481,8 @@ In this paper, we have given one convergent estimator (in Theorem \ref{thm:ab12}
 We give the exact recovery error upper bound for all the later three estimators (in Theorem \ref{thm:phase_transition}, \ref{thm:error_rate})
 and study their relationships. By introducing Ising model, our work makes a new path to study the exact recovery problem for SBM. More
 theoretical and empirical work will be done in the future such as the convergence analysis on modularity (in \eqref{eq:Qtransform}), the necessary iteration time (in Algorithm \ref{alg:m}) for Metropolis sampling, and so on.
-\appendix
-\section*{Proof of Theorem \ref{thm:ab12}}
+\section{Proof of Main Theorems}
+\subsection{Proof of Theorem \ref{thm:ab12}}
 \begin{lemma}\label{lem:ER_tr_counting}
 	Consider Erdos Renyi random graph $G$ with $n$ nodes, in which edges are placed independently with probability $p$ \cite{erdHos1960evolution}. Suppose
 	$p=\A$, the number of edges is denoted by $|E|$ while the number of triangles is $T$. Then
@@ -536,7 +537,7 @@ Then the variance of $T$ is
 	Consider a 3 community SBM$(3n, p, q)$ and count the number of triangles $T$ which has a node in $S_1$, one node in $S_2$ and one node in $S_3$.
 	Then the variance of $T$ is
 	\begin{equation*}\label{eq:SBM_tr_counting_three}
-	\Var[T] = q^3 n^3 + 3q^4 n^3(n-1) + 3q^5 n^3 (n-1)^2 - n^3(3n^2-3n+1)q^6
+	\Var[T] = n^3 q^3  + 3n^3(n-1) q^4  + 3 n^3 (n-1)^2 q^5 - n^3(3n^2-3n+1)q^6
 	\end{equation*}
 \end{lemma}
 The proof of the above two lemmas uses some counting techniques similar to that in \cite{holland1977method}, and we omit it here.
@@ -558,9 +559,9 @@ The proof of the above two lemmas uses some counting techniques similar to that 
 	For $T_{ij}$ we use the conclusion from Lemma \ref{lem:SBM_tr_counting_cross}.
 	We replace $n$ with $n/k$, $p=a\frac{\log n}{n}$, $q=b\frac{\log n}{n}$ in Equation \eqref{eq:SBM_tr_counting_cross}.
 	$\Var[T_{ij}] \sim \frac{ab^2}{2k^3} \log^3 n$. Since the expectation of $\frac{T_{ij}}{\log^3 n}$ is $(n/k)\binom{n/k}{2}pq^2/(\log^3 n)
-	=\frac{n-1}{n}\frac{ab^3}{k^3}$. By Chebyshev's inequality we can show that 
+	=\frac{n-1}{2n}\frac{ab^2}{k^3}$. By Chebyshev's inequality we can show that 
 	\begin{align*}
-	P( \Big|\frac{T_{ij}}{\log^3 n} - \frac{n-1}{n}\frac{ab^3}{k^3} \Big| > \epsilon) &\leq \frac{\Var[T_{ij} / \log^3 n]}{\epsilon^2} \\
+	P( \Big|\frac{T_{ij}}{\log^3 n} - \frac{n-1}{2n}\frac{ab^2}{k^3} \Big| > \epsilon) &\leq \frac{\Var[T_{ij} / \log^3 n]}{\epsilon^2} \\
 	& = \frac{1}{\epsilon^2}
 	O(\frac{1}{\log^3 n})
 	\end{align*}
@@ -573,7 +574,7 @@ The proof of the above two lemmas uses some counting techniques similar to that 
 	$$
 \end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:ab12}]
-	Let $e^*_1 = \frac{a+(k-1)b}{2k}$, $e^*_2 = \frac{a^3}{6} + \frac{k-1}{2}ab^2 + (k-1)(k-2)\frac{b^3}{6}$
+	Let $e^*_1 = \frac{a+(k-1)b}{2k}$, $k^2 e^*_2 = \frac{a^3}{6} + \frac{k-1}{2}ab^2 + (k-1)(k-2)\frac{b^3}{6}$
 	and $e_1 = \frac{T_1}{n\log n}, e_2 = \frac{T_2}{\log^3 n}$.
 	From Lemma \ref{lem:ER_tr_counting}, $e_1 \to e^*_1$.
 	From Lemma \ref{lem:sbmV}, $e_2 \to e^*_2$ as $n\to \infty$.
@@ -584,17 +585,18 @@ g(y): = (k-1)(y^3 - 6 e_1 y^2 + 12 e_1^2 y) + 6 e_2 - 8 k e_1^3 = 0
 This equation has unique real root since $g(y)$ is increasing on $\mathbb{R}$:  $g'(y) = 3(k-1)(y-2e_1)^2 \geq 0 $.
 Next we show the root lies within $(0, 2e_1)$.
 \begin{align*}
-\lim_{n\to \infty}g(0) &=  6e^*_2 - 8k(e^*_1)^3 =-\frac{3}{k^2}(k-1)(k-2)ab^2 \\
- &- \frac{k-1}{k^2} ((k-2)-(k-1)^2)b^3 < 0 \\
-\lim_{n\to \infty}g(2e_1) &= 6e^*_2 - 8(e^*_1)^3 = \frac{(k-1)(a-b)^3}{k^3} > 0
+&\lim_{n\to \infty}g(0) =  6e^*_2 - 8k(e^*_1)^3 =-\frac{3}{k^2}(k-1)(k-2)ab^2 \\
+&-\frac{3(k-1)}{k^2}a^2b - \frac{k-1}{k^2} ((k-2)-(k-1)^2)b^3 < 0 \\
+&\lim_{n\to \infty}g(2e_1) = 6e^*_2 - 8(e^*_1)^3 = \frac{(k-1)(a-b)^3}{k^3} > 0
+% verified with sympy
 \end{align*}
 
 Therefore, we can get a unique solution $y$ within $(0, 2e_1)$. Since $(a,b)$ is a solution for the equation array. The conclusion follows.
 
-By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_1} we can show $\mathbb{E}[\hat{a}] = a,
+By taking expectation on both sizes of \eqref{eq:e_1}, \eqref{eq:e_2} we can show $\mathbb{E}[\hat{a}] = a,
 \mathbb{E}[\hat{b}] = b$. By the continuous property of $g(y)$, $\hat{b} \to b$ and $\hat{a} \to a$ follows similarly.
 \end{proof}
-\section*{Proof of Theorem \ref{thm:phase_transition}}
+\subsection{Proof of Theorem \ref{thm:phase_transition}}
 \begin{proof}[Proof of Lemma \ref{lem:lemmaDiff}]
 	First we rewrite the energy term in \eqref{eq:energy} as:
 	\begin{equation*}
@@ -646,7 +648,7 @@ The following lemma gives the expression of $A_{\bar{\sigma}}, B_{\bar{\sigma}}$
 	A_{\bar{\sigma}} & \sim \textrm{Bernoulli}(\frac{n}{k}|\cI| - \frac{1}{2}\sum_{i=0}^{k-1}  (I^2_i + \sum_{j=0}^{k-1} I^2_{ij}), p) \label{eq:A_w}
 	\end{align}
 \end{lemma}
-The proof of Lemma \ref{lem:minus} is mostly of careful counting techniques and we omit it here.
+The proof of Lemma \ref{lem:minus} is mainly of careful counting techniques, and we omit it here.
 When $|\cI|$ is small compared with $n$, we have the following Lemma, which is an extension of Proposition 6 in \cite{ye2020exact}. 
 \begin{lemma}\label{lem:enhanced_fb}
 	For $t\in [\frac{1}{k}(b-a), 0]$
@@ -1009,7 +1011,7 @@ Therefore, from \eqref{eq:knd} we have
 	The conclusion of $P_a(\hat{X}^*) \leq \exp(-Cn)$ follows since $C$ can take any positive value.
 \end{proof}
 
-\section*{Proof of Theorem \ref{thm:error_rate}}
+\subsection{Proof of Theorem \ref{thm:error_rate}}
 
 
 \begin{lemma}\label{lem:mZW}
