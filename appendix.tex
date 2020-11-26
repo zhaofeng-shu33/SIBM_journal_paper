@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{xr} 
+\externaldocument{main}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\newcommand{\A}{\frac{a \log n}{n}}
+\newcommand{\B}{\frac{b \log n}{n}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\1}{\mathbbm{1}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\SSBM}{SSBM}
+\DeclareMathOperator{\SIBM}{SIBM}
+\DeclareMathOperator{\dist}{dist}
+\title{Supplementary Material}
+\begin{document}
+	\maketitle
+	\appendix
+\section{Proof of Lemma \ref{lem:7}}
+Theorem \ref{thm:12} 
+\begin{align}
+\mathbb{E}[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= (1+o(1))n^{g(\beta_n)} \\
+\Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &\leq n^{\tilde{g}(2\beta_n)} \notag \\
+&+ C_n n^{2g(\beta_n)-1}\log n
+\end{align}
+where $C_n = be^{2\beta_n}(e^{\beta_n}-1)^2$.
+
+Since $\tilde{g}(\beta)$ is convex,
+we have $2\tilde{g}(x) < \tilde{g}(0) + \tilde{g}(2x)$. That is $\tilde{g}(2\beta_n) - g(\beta_n) > g(\beta_n) - 1$.
+Therefore, the variance term is actually bounded by $n^{\tilde{g}(2\beta_n)} $.
+\end{document}

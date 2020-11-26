@@ -837,13 +837,22 @@ such that $k^n\exp(-Cn) < e^{-n}$
 \begin{align*}
 \frac{P_{\sigma|G}(\dist(\sigma, X)=r | D(\sigma, X))}
 {P_{\sigma|G}(\sigma=X | D(\sigma, X))} &= \sum_{\substack{D(\sigma, X) \\ \dist(\sigma, X)=r}} \frac{P_{\sigma | G}(\sigma = \bar{\sigma}) }{P_{\sigma | X}(\sigma = X)} \\
-&> \exp(-Cn)
+&> \exp(-n)
 \end{align*}
 happens with probability less than $e^{-n}$. Therefore, \eqref{eq:psigmaX1} holds.
 \end{proof}
 
-
 If $\gamma > b$ and $\beta < \beta^*$, we have the following lemma:
+\begin{lemma}\label{lem:7}
+	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG^{(1)}_n$ such that
+	$P_G(\cG^{(1)}_n) \geq 1-n^{g(\bar{\beta})}$
+	and
+	\begin{align}
+	\mathbb{E}[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= (1+o(1))n^{g(\beta_n)} \\
+	\Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &\leq (1+o(1)) n^{g(2\beta_n)} 
+	\end{align}
+\end{lemma}
+
 \begin{lemma}\label{prop:large2}
 	If $\gamma > b$ and $\beta < \beta^*$, there is a set $\cG'_n$ such that
 	\begin{equation}
@@ -862,20 +871,8 @@ The left hand of \eqref{eq:diff1g} can be rewritten as:
 	\frac{P_{\sigma|G}(\dist(\sigma, X)=1)}
 {P_{\sigma|G}(\sigma=X)}= (1+o(1))\sum_{s=1}^{k-1}\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0))
 \end{equation}
-From Lemma 7, there is a set $\cG^{(1)}_n$ such that $P_G(\cG^{(1)}_n) \geq 1-n^{g(\bar{\beta})}$
-and
-\begin{align}
-\mathbb{E}[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= (1+o(1))n^{g(\beta_n)} \\
-\Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &\leq n^{\tilde{g}(2\beta_n)} \notag \\
-&+ C_n n^{2g(\beta_n)-1}\log n
-\end{align}
-where $C_n = be^{2\beta_n}(e^{\beta_n}-1)^2$.
-
-Since $\tilde{g}(\beta)$ is convex,
-we have $2\tilde{g}(x) < \tilde{g}(0) + \tilde{g}(2x)$. That is $\tilde{g}(2\beta_n) - g(\beta_n) > g(\beta_n) - 1$.
-Therefore, the variance term is actually bounded by $n^{\tilde{g}(2\beta_n)} $.
-
-Let $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n) - \epsilon / 2} \}$,
+Let $\cG^{(1)}_n$ be defined in Lemma \ref{lem:7}
+and $\cG^{(2)}_n: = \{|\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) - (1+o(1))n^{g(\beta_n)}  | \leq n^{g(\beta_n) - \epsilon / 2} \}$,
 
 Using Chebyshev's inequality, we have
 \begin{equation*}
@@ -914,7 +911,7 @@ Therefore, from \eqref{eq:knd} we have
 	which can be transformed as
 	\begin{align}
 	(1 + \frac{\gamma \log n}{n})
-	\left( \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} Z_{ij} + \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} Z'_{ij} \right)　\notag\\
+	\left( \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} Z_{ij} + \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} Z'_{ij} \right)\notag\\
 	\leq \frac{\gamma \log n}{n} N_{\bar{\sigma}} + \frac{C}{\beta} n　\label{eq:small}
 	\end{align}
 	where $Z_{ij}$ i.i.d. $\sim \textrm{Bernoulli}(\frac{a\log n}{n})$ and $Z'_{ij}$ i.i.d. $\sim \textrm{Bernoulli}(\frac{b \log n}{n})$.
