@@ -712,10 +712,11 @@ establish the properties of Ising model.
 	
 	Under condition 2, we can get a lower bound on $N_{\bar{\sigma}}$ from \eqref{eq:N_w}: $N_{\bar{\sigma}} \geq \frac{1}{2}(\frac{n}{k} - \frac{2}{k(k-1)}\frac{n}{\sqrt{\log n}})^2 = \frac{n^2}{2k^2}(1+o(1))$.
 	
-	Now we use Chernoff inequality to bound \eqref{eq:BwA}, we can omit $\frac{\gamma \log n}{n}$ on the left hand since it is far smaller than $1$:
+	Now we use Chernoff inequality to bound \eqref{eq:BwA}, we can omit $\frac{\gamma \log n}{n}$ on the left hand since it is far smaller than $1$.
+	Let $Z \sim \textrm{Bernoulli}(\A), Z' \sim \textrm{Bernoulli}(\B)$, then
 	\begin{align*}
 	&P_G(\widetilde{D}(\bar{\sigma}, C))
-	\leq (\mathbb{E}[\exp(sZ_{ij})])^{|B_{\bar{\sigma}}|}(\mathbb{E}[\exp(-sZ_{ij})])^{|A_{\bar{\sigma}}|}\\
+	\leq (\mathbb{E}[\exp(sZ)])^{|B_{\bar{\sigma}}|}(\mathbb{E}[\exp(-sZ')])^{|A_{\bar{\sigma}}|}\\
 	&\cdot \exp(-s(\frac{\gamma \log n}{n} N_{\bar{\sigma}}  - \frac{C}{\beta}n)) \\
 	& \leq \exp\Big(|B_{\bar{\sigma}}|\frac{b\log n}{n}(e^s -1) + |A_{\bar{\sigma}}|\frac{a\log n}{n} (e^{-s} - 1) \\
 	&-s(\frac{\gamma \log n}{n} N_{\bar{\sigma}}  - \frac{C}{\beta}n)\Big) \\
@@ -911,7 +912,7 @@ Therefore, from \eqref{eq:knd} we have
 	which can be transformed as
 	\begin{align}
 	(1 + \frac{\gamma \log n}{n})
-	\left( \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} Z_{ij} + \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} Z'_{ij} \right)\notag\\
+	\left( \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} Z_{ij} + \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} Z_{ij} \right)\notag\\
 	\leq \frac{\gamma \log n}{n} N_{\bar{\sigma}} + \frac{C}{\beta} n\label{eq:small}
 	\end{align}
 	where $Z_{ij}$ i.i.d. $\sim \textrm{Bernoulli}(\frac{a\log n}{n})$ and $Z'_{ij}$ i.i.d. $\sim \textrm{Bernoulli}(\frac{b \log n}{n})$.
@@ -937,7 +938,7 @@ Therefore, from \eqref{eq:knd} we have
 	Since $\frac{C}{\beta} n = o(\frac{\log n}{n} N_{\bar{\sigma}})$ we can rewrite \eqref{eq:small} as
 	\begin{equation}
 	\left( \sum_{\substack{\bar{\sigma}_i  \neq \bar{\sigma}_j \\ X_i = X_j}} -Z_{ij}
-	+ \sum_{\substack{\bar{\sigma}_i  \neq \bar{\sigma}_j \\ X_i \neq X_j}} -Z'_{ij} \right)\geq -\gamma\frac{\log n N_{\bar{\sigma}}}{n}(1+o(1))
+	+ \sum_{\substack{\bar{\sigma}_i  \neq \bar{\sigma}_j \\ X_i \neq X_j}} -Z_{ij} \right)\geq -\gamma\frac{\log n N_{\bar{\sigma}}}{n}(1+o(1))
 	\end{equation}
 	Let $N_1 = \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i = X_j} 1$
 	and $N_2 = \sum_{\bar{\sigma}_i  \neq \bar{\sigma}_j, X_i \neq X_j} 1 = N_{\bar{\sigma}} - N_1$
@@ -945,7 +946,7 @@ Therefore, from \eqref{eq:knd} we have
 	Using Chernoff inequality we have
 	\begin{align*}
 	P_G(D'(\bar{\sigma}, C))&
-	\leq (\mathbb{E}[\exp(-s Z_{ij})])^{N_1} (\mathbb{E}[\exp(-s Z'_{ij})])^{N_2} \\
+	\leq (\mathbb{E}[\exp(-s Z )])^{N_1} (\mathbb{E}[\exp(-s Z' )])^{N_2} \\
 	&\cdot \exp(\gamma \frac{\log n N_{\bar{\sigma}} s}{n}(1+o(1))) \\
 	&= \exp \Big( \frac{\log n}{n}(1+o(1))(e^{-s}-1)(aN_1 + bN_2) \\
 	&+\gamma \frac{\log n N_{\bar{\sigma}} s}{n}(1+o(1))\Big)
