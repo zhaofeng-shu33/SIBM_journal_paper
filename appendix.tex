@@ -2,9 +2,14 @@
 \usepackage{xr} 
 \externaldocument{main}
 
-\usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{bookmark}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 \newtheorem{corollary}{Corollary}
@@ -25,7 +30,6 @@
 	\maketitle
 	\appendix
 \section{Proof of Lemma \ref{lem:7}}
-Theorem \ref{thm:12} 
 \begin{align}
 \mathbb{E}[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &= (1+o(1))n^{g(\beta_n)} \\
 \Var[\sum_{r=1}^n \exp(\beta_n (A_r^s - A_r^0)) | G \in \cG^{(1)}_n] &\leq n^{\tilde{g}(2\beta_n)} \notag \\
