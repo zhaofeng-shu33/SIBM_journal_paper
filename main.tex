@@ -687,14 +687,14 @@ establish the properties of Ising model.
 	Since $\sum_{i,j} I_{ij} = |\cI| \geq \frac{n}{\sqrt{\log n}}$ there exists $i,j$ such that $I_{ij} > \frac{n}{k} - \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}}$.
 	Under such condition, if $I_{ji} > \frac{n}{k} - \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}}$.
 	Let $X'$ be the vector which exchanges value of $w^i$ with $w^j$ in $X$. We consider
-	\begin{align*}
-	 \dist(\bar{\sigma}, X') & - \dist(\bar{\sigma}, X)= |\{ r \in [n]|X_r=w^i, \bar{\sigma}_r \neq w^j \}| \\
-	&+ |\{ r \in [n]|X_r=w^j, \bar{\sigma}_r \neq w^i \}| \\
-	&-|\{ r \in [n]|X_r=w^i, \bar{\sigma}_r \neq w^i \}| \\
-	&- |\{ r \in [n]|X_r=w^j, \bar{\sigma}_r \neq w^j \}| \\
-	& = \frac{n}{k} - I_{ij} +  \frac{n}{k} - I_{ji} - I_i - I_j \\
-	& < \frac{2}{k(k-1)}\frac{n}{\sqrt{\log n}} - I_i - I_j < 0
-	\end{align*}
+	\begin{align}
+	 \dist(\bar{\sigma}, X') & - \dist(\bar{\sigma}, X)= |\{ r \in [n]|X_r=w^i, \bar{\sigma}_r \neq w^j \}| \notag\\
+	&+ |\{ r \in [n]|X_r=w^j, \bar{\sigma}_r \neq w^i \}| \notag\\
+	&-|\{ r \in [n]|X_r=w^i, \bar{\sigma}_r \neq w^i \}| \notag\\
+	&- |\{ r \in [n]|X_r=w^j, \bar{\sigma}_r \neq w^j \}| \notag\\
+	& = \frac{n}{k} - I_{ij} +  \frac{n}{k} - I_{ji} - I_i - I_j\label{eq:distsmall} \\
+	& < \frac{2}{k(k-1)}\frac{n}{\sqrt{\log n}} - I_i - I_j < 0\notag
+	\end{align}
 	which contracts with that $\bar{\sigma}$ is nearest to $X$.
 	Therefore, we should have $I_{ji} < \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}}$.
 	Now the $(i, j)$ pair satisfies condition 2, which contracts with that $\bar{\sigma}$ satisfies neither of the two conditions.
@@ -710,7 +710,13 @@ establish the properties of Ising model.
 	+ (\frac{n}{k} - \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}})^2 = \frac{n^2}{k} - \frac{2n^2}{k^2 (k-1)\sqrt{\log n}}(1+o(1))$.
 	As a result, $A_{\bar{\sigma}} \geq \frac{n^2}{k^2 (k-1)\sqrt{\log n}}(1+o(1))$.
 	
-	Under condition 2, we can get a lower bound on $N_{\bar{\sigma}}$ from \eqref{eq:N_w}: $N_{\bar{\sigma}} \geq \frac{1}{2}(\frac{n}{k} - \frac{2}{k(k-1)}\frac{n}{\sqrt{\log n}})^2 = \frac{n^2}{2k^2}(1+o(1))$.
+	Under condition 2, we can get a lower bound on $N_{\bar{\sigma}}$. Since
+	$\dist(\bar{\sigma}, X') - \dist(\bar{\sigma}, X) \geq 0$, from \eqref{eq:distsmall}, we have
+	$I_{ij} + I_{ji} + I_{i} + I_j \leq \frac{2n}{k} $.
+	Since $I_i \geq I_{ij} > \frac{n}{k} - \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}}$,
+	we have $I_j \leq \frac{2}{k(k-1)}\frac{n}{\sqrt{\log n} }$.
+	Now consider $I'_j - I_j \geq  \frac{n}{k} - \frac{3}{k(k-1)}\frac{n}{\sqrt{\log n} }$.
+	From \eqref{eq:N_w}: $N_{\bar{\sigma}} \geq \frac{1}{2}(\frac{n}{k} - \frac{3}{k(k-1)}\frac{n}{\sqrt{\log n}})^2 = \frac{n^2}{2k^2}(1+o(1))$.
 	
 	Now we use Chernoff inequality to bound \eqref{eq:BwA}, we can omit $\frac{\gamma \log n}{n}$ on the left hand since it is far smaller than $1$.
 	Let $Z \sim \textrm{Bernoulli}(\A), Z' \sim \textrm{Bernoulli}(\B)$, then
