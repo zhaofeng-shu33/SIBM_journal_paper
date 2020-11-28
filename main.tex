@@ -708,10 +708,14 @@ establish the properties of Ising model.
 	We further have $\sum_{i=0}^{k-1} \sum_{j=0}^{k-1} I'^2_{ij} \leq (k-1)\frac{n^2}{k^2} + (\frac{n}{k} - I_{ij})^2 + I^2_{ij}$ where
 	$I_{ij}$ satisfies condition 1. Therefore, $\sum_{i=0}^{k-1} \sum_{j=0}^{k-1} I'^2_{ij} \leq (k-1)\frac{n^2}{k^2} + (\frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}})^2
 	+ (\frac{n}{k} - \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}})^2 = \frac{n^2}{k} - \frac{2n^2}{k^2 (k-1)\sqrt{\log n}}(1+o(1))$.
-	As a result, $A_{\bar{\sigma}} \geq \frac{n^2}{k^2 (k-1)\sqrt{\log n}}(1+o(1))$.
+	As a result
+	\begin{equation}\label{eq:Asigma}
+	A_{\bar{\sigma}} \geq \frac{n^2}{k^2 (k-1)\sqrt{\log n}}(1+o(1))
+	\end{equation}
+	
 	
 	Under condition 2, we can get a lower bound on $N_{\bar{\sigma}}$. Since
-	$\dist(\bar{\sigma}, X') - \dist(\bar{\sigma}, X) \geq 0$, from \eqref{eq:distsmall}, we have
+	$\dist(\bar{\sigma}, X') - \dist(\bar{\sigma}, X) \geq 0$, from \eqref{eq:distsmall} we have
 	$I_{ij} + I_{ji} + I_{i} + I_j \leq \frac{2n}{k} $.
 	Since $I_i \geq I_{ij} > \frac{n}{k} - \frac{1}{k(k-1)}\frac{n}{\sqrt{\log n}}$,
 	we have $I_j \leq \frac{2}{k(k-1)}\frac{n}{\sqrt{\log n} }$.
@@ -1051,9 +1055,9 @@ From Lemma \ref{lem:minus}, we can see  $|B_{\bar{\sigma}}| = |A_{\bar{\sigma}}|
 and $N_{\bar{\sigma}} = 0$. Then from \eqref{eq:Hgeneral}, $H(\bar{\sigma}) < H(X)$ is equivalent with $B_{\bar{\sigma}} > A_{\bar{\sigma}}$.
 
 Therefore, when $ \dist(\bar{\sigma}, X) \geq \frac{n}{\sqrt{\log n} }$ and $D(\sigma, X)$,
-we must have $A_{\bar{\sigma}} \geq \frac{n^2}{k^2(k-1)\sqrt{\log n} } (1+o(1))$.
+from \eqref{eq:Asigma}, we have $A_{\bar{\sigma}} \geq \frac{n^2}{k^2(k-1)\sqrt{\log n} } (1+o(1))$.
 We use Lemma \ref{lem:mZW} by letting $m=|A_{\bar{\sigma}}|$ when $m \geq \frac{n}{ \sqrt{\log n}}$, the error term is bounded
-by $\sum_{\frac{n}{ \sqrt{\log n}}} P_F^{(r)} \leq \sum_{\frac{n}{ \sqrt{\log n}}} (k-1)^r \exp(-\frac{(\sqrt{a} - \sqrt{b})^2}{k^2(k-1)} n \sqrt{\log n}))
+by $\sum_{r\geq \frac{n}{ \sqrt{\log n}}} P_F^{(r)} \leq \sum_{r\geq \frac{n}{ \sqrt{\log n}}} (k-1)^r \exp(-\frac{(\sqrt{a} - \sqrt{b})^2}{k^2(k-1)} n \sqrt{\log n}))
 \leq \exp(-n)$, which decreases exponentially fast.
 For $m < \frac{n}{ \sqrt{\log n}}$, we can use Lemma \ref{lem:enhanced_fb} directly 
 by considering $\sum_{r=2}^{\frac{n}{ \sqrt{\log n}}} P_F^{(r)}$. The summation starts from $r=2$ since $\sigma \in W^*$.
